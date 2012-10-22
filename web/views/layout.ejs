@@ -22,7 +22,7 @@
                     <div class="loginHeaderUsername"><%= session.user.name %></div>
                     <a class="btn btn-small btn-primary" href="/logout" title="Log out of SchematicDepot">Log Out</a>
                 <% } else { %>
-                    <form class="form-inline" action="/login" method="POST">
+                    <form class="form-inline" action="/user/login" method="POST">
                         <input type="text" name="username" class="input-small" placeholder="Username"/>
                         <input type="password" name="password" class="input-small" placeholder="Password"/>
                         <input type="submit" class="btn btn-small btn-primary" href="/login" title="Log in to SchematicDepot" value="Log In"/>
