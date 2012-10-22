@@ -1,0 +1,26 @@
+{
+  "name": "schematicdepot.com",
+  "version": "0.0.1",
+  "description": "Website to share KiCad symbols and modules",
+  "scripts": {
+    "test": "./node_modules/.bin/nodeunit test",
+    "start": "./bin/server.js"
+  },
+  "repository": "",
+  "keywords": [
+    "kicad"
+  ],
+  "author": "Joe Ferner",
+  "license": "MIT",
+  "dependencies": {
+    "kicad2svg": "git://github.com/joeferner/node-kicad2svg.git",
+    "express": "~3.0.0rc5",
+    "browserify": "~1.16.1",
+    "async": "~0.1.22",
+    "optimist": "~0.3.5",
+    "connect-redis": "~1.4.4"
+  },
+  "devDependencies": {
+    "nodeunit": "~0.7.4"
+  }
+}
