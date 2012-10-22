@@ -1,0 +1,18 @@
+
+/******** loginHeader ********/
+.loginHeader {
+  float: right;
+}
+
+.loginHeader form {
+  margin: 0;
+}
+
+.loginHeader input {
+  margin-bottom: 0;
+  margin-top: 6px;
+}
+
+.loginHeaderUsername {
+  display: inline;
+}

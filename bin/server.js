@@ -15,6 +15,9 @@ var args = optimist
   .options('sessionSecret', {
     describe: 'Secret used to secure session storage.'
   })
+  .options('workers', {
+    describe: 'Number of workers to run.'
+  })
   .argv;
 
 if (args.help) {
