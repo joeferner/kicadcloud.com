@@ -20,3 +20,23 @@ body {
 .loginHeaderUsername {
   display: inline;
 }
+
+/******** recentList ********/
+.recentList {
+
+}
+
+.recentList h2 {
+  margin-bottom: 0;
+}
+
+.recentItems {
+
+}
+
+.recentItem {
+  margin: 3px;
+  width: 135px;
+  height: 135px;
+  border: 1px solid #eee;
+}

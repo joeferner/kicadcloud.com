@@ -1,1 +1,63 @@
-Home
+<div class="recentList">
+    <h2>Recent Schematic Symbols</h2>
+    <div class="recentItems" id="recentSchematicSymbols">
+        <div class="row">
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol0"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol1"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol2"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol3"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol4"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol5"><img src="/images/recentItemLoading.png"/></div></div>
+        </div>
+        <div class="row">
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol6"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol7"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol8"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol9"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol10"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentSchematicSymbol11"><img src="/images/recentItemLoading.png"/></div></div>
+        </div>
+    </div>
+</div>
+
+<div class="recentList">
+    <h2>Recent PCB Modules</h2>
+    <div class="recentItems" id="recentPcbModules">
+        <div class="row">
+            <div class="span2"><div class="recentItem" id="recentPcbModule0"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule1"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule2"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule3"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule4"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule5"><img src="/images/recentItemLoading.png"/></div></div>
+        </div>
+        <div class="row">
+            <div class="span2"><div class="recentItem" id="recentPcbModule6"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule7"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule8"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule9"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule10"><img src="/images/recentItemLoading.png"/></div></div>
+            <div class="span2"><div class="recentItem" id="recentPcbModule11"><img src="/images/recentItemLoading.png"/></div></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $.get('/schematicSymbols/recent', function(data) {
+            data.forEach(function(item, i) {
+                renderSchematicSymbol('recentSchematicSymbol' + i, item.text, {
+                    size: 135
+                });
+            });
+        });
+
+        $.get('/pcbModules/recent', function(data) {
+            data.forEach(function(item, i) {
+                renderPcbModule('recentPcbModule' + i, item.text, {
+                    size: 135
+                });
+            });
+        });
+    });
+</script>
