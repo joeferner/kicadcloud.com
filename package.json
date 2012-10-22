@@ -21,7 +21,8 @@
     "connect-redis": "~1.4.4",
     "ejs": "~0.8.3",
     "express-partials": "0.0.6",
-    "sf": "~0.1.5"
+    "sf": "~0.1.5",
+    "express-validator": "~0.3.0"
   },
   "devDependencies": {
     "nodeunit": "~0.7.4"

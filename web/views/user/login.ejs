@@ -1,1 +1,49 @@
-Login
+<div class="row">
+    <div class="span6">
+        <form action="/user/login" method="POST">
+            <legend>Login</legend>
+
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Username" value="<%= session.username || '' %>" />
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Password" />
+
+            <br/>
+            <input type="submit" class="btn btn-primary" href="/user/login" title="Log in to SchematicDepot" value="Log In"/>
+        </form>
+    </div>
+    <div class="span6">
+        <form action="/user/signup" method="POST">
+            <legend>Sign up</legend>
+
+            <div class="control-group <%= getValidationErrorClass('username') %>">
+                <label>Username</label>
+                <div class="controls">
+                    <input type="text" name="username" placeholder="Username" value="<%= previousValues['username'] || '' %>" />
+                    <%- getValidationError('username') %>
+                </div>
+            </div>
+
+            <div class="control-group <%= getValidationErrorClass('password') %>">
+                <label>Password</label>
+                <input type="password" name="password1" placeholder="Password" />
+                <br/>
+                <input type="password" name="password2" placeholder="Password Again" />
+                <%- getValidationError('password') %>
+            </div>
+
+
+            <div class="control-group <%= getValidationErrorClass('email') %>">
+                <label>E-Mail</label>
+                <div class="controls">
+                    <input type="text" name="email" placeholder="E-Mail" value="<%= previousValues['email'] || '' %>" />
+                    <%- getValidationError('email') %>
+                </div>
+            </div>
+
+            <br/>
+            <input type="submit" class="btn btn-primary" href="/user/signup" title="Sign up for SchematicDepot" value="Sign Up"/>
+        </form>
+    </div>
+</div>
