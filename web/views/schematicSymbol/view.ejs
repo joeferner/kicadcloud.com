@@ -1,0 +1,25 @@
+<form action="/schematicSymbol/<%= item.id %>" method="POST">
+  <div class="row schematicSymbol">
+    <div class="span4">
+      <div id="svgContainer"></div>
+    </div>
+    <div class="span8">
+      <div class="readWriteField">
+        <label class="title">Title:</label>
+        <% if(editable) { %>
+        <input type="text" class="value" name="title" value="<%= item.title %>"/>
+        <% } else { %>
+        <span class="value"><%= item.title %></span>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+  var kicadData = '<%- item.jsKiDadData %>';
+
+  renderSchematicSymbol('#svgContainer', kicadData, {
+    size: 360
+  });
+</script>

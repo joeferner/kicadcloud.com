@@ -40,7 +40,7 @@
   $('#recentPcbModules').html(recentPcbModulesHtml);
 
   $(function() {
-    $.get('/schematicSymbols/recent', function(data) {
+    $.get('/schematicSymbol/recent', function(data) {
       var html = '';
       data.forEach(function(item) {
         item.type = 'schematicSymbol';
@@ -55,7 +55,7 @@
       });
     });
 
-    $.get('/pcbModules/recent', function(data) {
+    $.get('/pcbModule/recent', function(data) {
       var html = '';
       data.forEach(function(item, i) {
         item.type = 'pcbModule';

@@ -1,14 +1,16 @@
 <li>
-  <div class="info">
-    <div class="recentItemSvg" id="recentItem_<%= type %>_<%= id %>"></div>
-    <div class="recentItemTitle"><%= title %></div>
-  </div>
-  <div class="moreInfo">
-    <div class="readonlyField">
-      <span class="title">Created By:</span><span class="value"><%= createdBy %></span>
+  <a href="/<%= type %>/<%= id %>">
+    <div class="info">
+      <div class="recentItemSvg" id="recentItem_<%= type %>_<%= id %>"></div>
+      <div class="recentItemTitle"><%= title %></div>
     </div>
-    <div class="readonlyField">
-      <span class="title">Modified Date:</span><span class="value"><%= sf('{0:MM/dd/yyyy}', new Date(modifiedDate)) %></span>
+    <div class="moreInfo">
+      <div class="readonlyField">
+        <span class="title">Created By:</span><span class="value"><%= createdBy %></span>
+      </div>
+      <div class="readonlyField">
+        <span class="title">Modified Date:</span><span class="value"><%= sf('{0:MM/dd/yyyy}', new Date(modifiedDate)) %></span>
+      </div>
     </div>
-  </div>
+  </a>
 </li>

@@ -40,6 +40,30 @@ body {
   padding-left: 10px;
 }
 
+/******** readonlyField *****/
+.readWriteField {
+
+}
+
+.readWriteField .title {
+  display: block;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.readWriteField .value {
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+/******** schematicSymbol ******/
+.schematicSymbol #svgContainer {
+  border: 1px solid #eee;
+  width: 370px;
+  height: 370px;
+  padding: 5px;
+}
+
 /******** recentList ********/
 .recentList {
 
@@ -61,6 +85,11 @@ ul.recentItems li {
   margin: 15px;
   padding: 0;
   position: relative;
+}
+
+ul.recentItems li a {
+  text-decoration: none;
+  color: #000;
 }
 
 ul.recentItems li .recentItemSvg {
