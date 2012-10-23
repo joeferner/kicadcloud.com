@@ -1,42 +1,63 @@
 <form action="/schematicSymbol/<%= item.id %>" method="POST">
   <div class="row schematicSymbol">
+    <div class="span1">
+      <% if(item.id !== 'new') { %>
+      <div class="vote">
+        <a id="voteUp" class="<%= item.isUpVote ? 'voteUpOn' : 'voteUpOff' %>" href="javascript:">up vote</a>
+        <span id="voteCount" class="voteCount"><%= item.upVoteCount || 0 %></span>
+        <a id="voteDown" class="<%= item.isDownVote ? 'voteDownOn' : 'voteDownOff' %>" href="javascript:">down vote</a>
+
+        <a id="favorite" class="<%= item.isFavorite ? 'favoriteOn' : 'favoriteOff' %>" href="javascript:">favorite</a>
+
+        <div id="favoriteCount" class="favoriteCount"><%= item.favoriteCount || '' %></div>
+      </div>
+      <% } %>
+    </div>
     <div class="span4">
       <div id="svgContainer"></div>
 
       <!-- Description -->
       <% if(editable) { %>
-        <div class="readWriteField">
-          <label class="title">KiCad Code:</label>
-          <textarea type="text" class="value" name="text" id="text" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.text %></textarea>
-        </div>
+      <div class="readWriteField <%= getValidationErrorClass('text') %>">
+        <label class="title">KiCad Code:</label>
+        <textarea type="text" class="value" name="text" id="text" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%=
+          previousValues.text || item.text %></textarea>
+
+        <div id="codeErrors" class="codeErrors"></div>
+        <%- getValidationError('text') %>
+      </div>
       <% } %>
     </div>
-    <div class="span8">
+    <div class="span7">
       <!-- Title -->
-      <div class="readWriteField">
+      <div class="readWriteField <%= getValidationErrorClass('title') %>">
         <label class="title">Title:</label>
         <% if(editable) { %>
-        <input type="text" class="value" name="title" value="<%= item.title %>"/>
+        <input type="text" class="value" name="title" value="<%= previousValues.title || item.title %>"/>
+        <%- getValidationError('title') %>
         <% } else { %>
         <span class="value"><%= item.title %></span>
         <% } %>
       </div>
 
       <!-- Description -->
-      <div class="readWriteField">
+      <div class="readWriteField <%= getValidationErrorClass('description') %>">
         <label class="title">Description:</label>
         <% if(editable) { %>
-        <textarea type="text" class="value" name="description" style="width: 400px; height: 200px;"><%= item.description %></textarea>
+        <textarea type="text" class="value" name="description" style="width: 400px; height: 200px;"><%=
+          previousValues.description || item.description %></textarea>
+        <%- getValidationError('description') %>
         <% } else { %>
         <pre class="value"><%= item.description %></pre>
         <% } %>
       </div>
 
       <!-- Keywords -->
-      <div class="readWriteField">
+      <div class="readWriteField <%= getValidationErrorClass('keywords') %>">
         <label class="title">Keywords:</label>
         <% if(editable) { %>
-        <input type="text" class="value" name="keywords" value="<%= item.keywords %>"/>
+        <input type="text" class="value" name="keywords" value="<%= previousValues.keywords || item.keywords %>"/>
+        <%- getValidationError('keywords') %>
         <% } else { %>
         <span class="value"><%= item.keywords %></span>
         <% } %>
@@ -44,7 +65,8 @@
 
       <!-- Created By -->
       <div class="readonlyField">
-        <span class="title">Created By:</span><span class="value"><a href="/user/<%= item.createdByUserId %>"><%= item.createdBy %></a></span>
+        <span class="title">Created By:</span><span class="value"><a href="/user/<%= item.createdByUserId %>"><%=
+        item.createdBy %></a></span>
       </div>
 
       <!-- Modified Date -->
@@ -54,22 +76,110 @@
 
       <!-- Actions -->
       <% if(editable) { %>
-        <br/>
-        <input type="submit" class="btn btn-primary" href="/schematicSymbol/<%= item.id %>" title="Save" value="Save"/>
+      <br/>
+      <input type="submit" class="btn btn-primary" href="/schematicSymbol/<%= item.id %>" title="Save" value="Save"/>
       <% } %>
     </div>
   </div>
 </form>
 
 <script type="text/javascript">
+  var schematicSymbolId = '<%= item.id %>';
+
+  $(function() {
+    $('#voteUp').click(function() {
+      var state = getUpDownState();
+      var newState = state === 'up' ? 'none' : 'up';
+      changeUpDownState(newState);
+      $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
+        changeUpDownCount(data.upVoteCount);
+      });
+    });
+
+    $('#voteDown').click(function() {
+      var state = getUpDownState();
+      var newState = state === 'down' ? 'none' : 'down';
+      changeUpDownState(newState);
+      $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
+        changeUpDownCount(data.upVoteCount);
+      });
+    });
+
+    $('#favorite').click(function() {
+      var state = getFavoriteState();
+      var newState = !state;
+      changeFavoriteState(newState);
+      $.post('/schematicSymbol/' + schematicSymbolId + '/favorite', { state: newState }, function(data) {
+        changeFavoriteCount(data.favoriteCount);
+      });
+    });
+  });
+
+  function getFavoriteState() {
+    return $('#favorite').hasClass('favoriteOn');
+  }
+
+  function changeFavoriteState(state) {
+    var favorite = $('#favorite');
+    if (state) {
+      favorite.addClass('favoriteOn').removeClass('favoriteOff');
+    } else {
+      favorite.addClass('favoriteOff').removeClass('favoriteOn');
+    }
+  }
+
+  function changeFavoriteCount(count) {
+    $('#favoriteCount').text(count);
+  }
+
+  function getUpDownState() {
+    if ($('#voteUp').hasClass('voteUpOn')) {
+      return 'up';
+    }
+    if ($('#voteDown').hasClass('voteDownOn')) {
+      return 'down';
+    }
+    return 'none';
+  }
+
+  function changeUpDownCount(count) {
+    $('#voteCount').text(count);
+  }
+
+  function changeUpDownState(state) {
+    var voteUp = $('#voteUp');
+    var voteDown = $('#voteDown');
+
+    if (state === 'up') {
+      voteUp.addClass('voteUpOn').removeClass('voteUpOff');
+      voteDown.addClass('voteDownOff').removeClass('voteDownOn');
+    } else if (state === 'down') {
+      voteUp.addClass('voteUpOff').removeClass('voteUpOn');
+      voteDown.addClass('voteDownOn').removeClass('voteDownOff');
+    } else {
+      voteUp.addClass('voteUpOff').removeClass('voteUpOn');
+      voteDown.addClass('voteDownOff').removeClass('voteDownOn');
+    }
+  }
+
   function updateRender() {
     render($('#text').val());
   }
 
   function render(data) {
-    renderSchematicSymbol('#svgContainer', data, {
-      size: 360
-    });
+    if (!data) {
+      return;
+    }
+    var codeErrors = $('#codeErrors');
+    try {
+      codeErrors.text('');
+      renderSchematicSymbol('#svgContainer', data, {
+        size: 360
+      });
+    } catch (e) {
+      codeErrors.text('' + e);
+      console.error('Could not render', e.stack);
+    }
   }
 </script>
 <script type="text/javascript">
