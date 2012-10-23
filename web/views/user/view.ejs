@@ -1,0 +1,17 @@
+<form action="/user/<%= item.id %>" method="POST">
+  <div class="row">
+    <div class="span12">
+      <!-- Name -->
+      <div class="readWriteField">
+        <label class="title">Name:</label>
+        <% if(editable) { %>
+        <input type="text" class="value" name="name" value="<%= item.name %>"/>
+        <% } else { %>
+        <span class="value"><%= item.name %></span>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</form>
+

@@ -2,6 +2,14 @@
   <div class="row schematicSymbol">
     <div class="span4">
       <div id="svgContainer"></div>
+
+      <!-- Description -->
+      <% if(editable) { %>
+        <div class="readWriteField">
+          <label class="title">KiCad Code:</label>
+          <textarea type="text" class="value" name="text" id="text" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.text %></textarea>
+        </div>
+      <% } %>
     </div>
     <div class="span8">
       <!-- Title -->
@@ -18,19 +26,53 @@
       <div class="readWriteField">
         <label class="title">Description:</label>
         <% if(editable) { %>
-        <textarea type="text" class="value" name="description"><%= item.description %></textarea>
+        <textarea type="text" class="value" name="description" style="width: 400px; height: 200px;"><%= item.description %></textarea>
         <% } else { %>
         <pre class="value"><%= item.description %></pre>
         <% } %>
       </div>
+
+      <!-- Keywords -->
+      <div class="readWriteField">
+        <label class="title">Keywords:</label>
+        <% if(editable) { %>
+        <input type="text" class="value" name="keywords" value="<%= item.keywords %>"/>
+        <% } else { %>
+        <span class="value"><%= item.keywords %></span>
+        <% } %>
+      </div>
+
+      <!-- Created By -->
+      <div class="readonlyField">
+        <span class="title">Created By:</span><span class="value"><a href="/user/<%= item.createdByUserId %>"><%= item.createdBy %></a></span>
+      </div>
+
+      <!-- Modified Date -->
+      <div class="readonlyField">
+        <span class="title">Modified Date:</span><span class="value"><%= sf('{0:MM/dd/yyyy}', new Date(item.modifiedDate)) %></span>
+      </div>
+
+      <!-- Actions -->
+      <% if(editable) { %>
+        <br/>
+        <input type="submit" class="btn btn-primary" href="/schematicSymbol/<%= item.id %>" title="Save" value="Save"/>
+      <% } %>
     </div>
   </div>
 </form>
 
 <script type="text/javascript">
-  var kicadData = '<%- item.jsKiDadData %>';
+  function updateRender() {
+    render($('#text').val());
+  }
 
-  renderSchematicSymbol('#svgContainer', kicadData, {
-    size: 360
-  });
+  function render(data) {
+    renderSchematicSymbol('#svgContainer', data, {
+      size: 360
+    });
+  }
+</script>
+<script type="text/javascript">
+  // keep this in a separate block unless it has broken code.
+  render('<%- item.jsKiCadData %>');
 </script>
