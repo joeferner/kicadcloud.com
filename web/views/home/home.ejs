@@ -1,63 +1,72 @@
 <div class="recentList">
     <h2>Recent Schematic Symbols</h2>
-    <div class="recentItems" id="recentSchematicSymbols">
-        <div class="row">
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol0"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol1"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol2"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol3"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol4"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol5"><img src="/images/recentItemLoading.png"/></div></div>
-        </div>
-        <div class="row">
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol6"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol7"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol8"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol9"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol10"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentSchematicSymbol11"><img src="/images/recentItemLoading.png"/></div></div>
-        </div>
-    </div>
+    <ul class="recentItems" id="recentSchematicSymbols">
+    </ul>
 </div>
+<div style="clear: both;"/>
 
 <div class="recentList">
     <h2>Recent PCB Modules</h2>
-    <div class="recentItems" id="recentPcbModules">
-        <div class="row">
-            <div class="span2"><div class="recentItem" id="recentPcbModule0"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule1"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule2"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule3"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule4"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule5"><img src="/images/recentItemLoading.png"/></div></div>
-        </div>
-        <div class="row">
-            <div class="span2"><div class="recentItem" id="recentPcbModule6"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule7"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule8"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule9"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule10"><img src="/images/recentItemLoading.png"/></div></div>
-            <div class="span2"><div class="recentItem" id="recentPcbModule11"><img src="/images/recentItemLoading.png"/></div></div>
-        </div>
-    </div>
+    <ul class="recentItems" id="recentPcbModules">
+    </ul>
 </div>
+<div style="clear: both;"/>
 
 <script type="text/javascript">
-    $(function() {
-        $.get('/schematicSymbols/recent', function(data) {
-            data.forEach(function(item, i) {
-                renderSchematicSymbol('recentSchematicSymbol' + i, item.text, {
-                    size: 135
-                });
-            });
-        });
+  var recentItemTemplate = new EJS({url: '/templates/recentItem.ejs'});
+  var sf = document.require('sf');
 
-        $.get('/pcbModules/recent', function(data) {
-            data.forEach(function(item, i) {
-                renderPcbModule('recentPcbModule' + i, item.text, {
-                    size: 135
-                });
-            });
+  var defaultValue = {
+    id: 0,
+    title: 'Loading...',
+    text: '',
+    createdBy: 'Loading...',
+    modifiedDate: 'Loading...',
+    sf: sf
+  };
+
+  var recentSchematicSymbolsHtml = '';
+  defaultValue.type = 'schematicSymbol';
+  for(var i=0; i<14; i++) {
+    recentSchematicSymbolsHtml += recentItemTemplate.render(defaultValue);
+  }
+  $('#recentSchematicSymbols').html(recentSchematicSymbolsHtml);
+
+  var recentPcbModulesHtml = '';
+  defaultValue.type = 'pcbModule';
+  for(i=0; i<14; i++) {
+    recentPcbModulesHtml += recentItemTemplate.render(defaultValue);
+  }
+  $('#recentPcbModules').html(recentPcbModulesHtml);
+
+  $(function() {
+    $.get('/schematicSymbols/recent', function(data) {
+      var html = '';
+      data.forEach(function(item) {
+        item.type = 'schematicSymbol';
+        html += recentItemTemplate.render(item);
+      });
+      $('#recentSchematicSymbols').html(html);
+
+      data.forEach(function(item) {
+        renderSchematicSymbol('#recentItem_schematicSymbol_' + item.id, item.text, {
+          size: 130
         });
+      });
     });
+
+    $.get('/pcbModules/recent', function(data) {
+      var html = '';
+      data.forEach(function(item, i) {
+        item.type = 'pcbModule';
+        html += recentItemTemplate.render(item);
+      });
+      $('#recentPcbModules').html(html);
+      data.forEach(function(item) {
+        renderPcbModule('#recentItem_pcbModule_' + item.id, item.text, {
+          size: 130
+        });
+      });
+    });
+  });
 </script>

@@ -1,0 +1,102 @@
+@import "elements.less";
+
+/******** body ***************/
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+/******** loginHeader ********/
+.loginHeader {
+  float: right;
+}
+
+.loginHeader form {
+  margin: 0;
+}
+
+.loginHeader input {
+  margin-bottom: 0;
+  margin-top: 6px;
+}
+
+.loginHeaderUsername {
+  display: inline;
+}
+
+/******** readonlyField *****/
+.readonlyField {
+
+}
+
+.readonlyField .title {
+  display: block;
+  white-space: nowrap;
+  color: #888;
+}
+
+.readonlyField .value {
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+/******** recentList ********/
+.recentList {
+
+}
+
+.recentList h2 {
+  margin-bottom: 0;
+}
+
+ul.recentItems {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+}
+
+ul.recentItems li {
+  display: inline;
+  float: left;
+  margin: 15px;
+  padding: 0;
+  position: relative;
+}
+
+ul.recentItems li .recentItemSvg {
+  border: 1px solid #eee;
+  padding: 3px;
+  .rounded(3px);
+}
+
+ul.recentItems li:hover {
+  z-index: 99;
+}
+
+ul.recentItems li .info {
+  position: relative;
+}
+
+ul.recentItems li:hover .info {
+  z-index: 999;
+}
+
+.moreInfo {
+  .drop-shadow(0, 1px, 5px, 0.4);
+}
+
+ul.recentItems li .moreInfo {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  padding: 180px 20px 10px;
+  width: 120px;
+  display: none;
+  background: #fff;
+
+  .rounded(3px);
+}
+
+ul.recentItems li:hover .moreInfo {
+  display: block;
+}
