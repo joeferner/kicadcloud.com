@@ -4,7 +4,7 @@
             <legend>Login</legend>
 
             <label>Username</label>
-            <input type="text" name="username" placeholder="Username" value="<%= session.username || '' %>" />
+            <input type="text" name="username" placeholder="Username" value="<%= userInfo.username %>" />
 
             <label>Password</label>
             <input type="password" name="password" placeholder="Password" />
@@ -20,7 +20,7 @@
             <div class="control-group <%= getValidationErrorClass('username') %>">
                 <label>Username</label>
                 <div class="controls">
-                    <input type="text" name="username" placeholder="Username" value="<%= previousValues['username'] || '' %>" />
+                    <input type="text" name="username" placeholder="Username" value="<%= userInfo.username %>" />
                     <%- getValidationError('username') %>
                 </div>
             </div>
@@ -37,7 +37,7 @@
             <div class="control-group <%= getValidationErrorClass('email') %>">
                 <label>E-Mail</label>
                 <div class="controls">
-                    <input type="text" name="email" placeholder="E-Mail" value="<%= previousValues['email'] || '' %>" />
+                    <input type="text" name="email" placeholder="E-Mail" value="<%= userInfo.email %>" />
                     <%- getValidationError('email') %>
                 </div>
             </div>

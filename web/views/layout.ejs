@@ -23,7 +23,7 @@
             <div class="loginHeader">
                 <% if(session.user) { %>
                     <div class="loginHeaderUsername"><%= session.user.name %></div>
-                    <a class="btn btn-small btn-primary" href="/logout" title="Log out of SchematicDepot">Log Out</a>
+                    <a class="btn btn-small btn-primary" href="/user/logout" title="Log out of SchematicDepot">Log Out</a>
                 <% } else { %>
                     <form class="form-inline" action="/user/login" method="POST">
                         <input type="text" name="username" class="input-small" placeholder="Username"/>
@@ -36,7 +36,7 @@
     </div>
 </div>
 <div class="container">
-    <%- outputFlashes %>
+    <%- outputFlashes() %>
     <%- body %>
     <hr>
     <footer>

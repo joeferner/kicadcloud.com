@@ -20,8 +20,7 @@
       <% if(editable) { %>
       <div class="readWriteField <%= getValidationErrorClass('code') %>">
         <label class="title">KiCad Code:</label>
-        <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%=
-          previousValues.code || item.code %></textarea>
+        <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
 
         <div id="codeErrors" class="codeErrors"></div>
         <%- getValidationError('code') %>
@@ -33,7 +32,7 @@
       <div class="readWriteField <%= getValidationErrorClass('title') %>">
         <label class="title">Title:</label>
         <% if(editable) { %>
-        <input type="text" class="value" name="title" value="<%= previousValues.title || item.title %>"/>
+        <input type="text" class="value" name="title" value="<%= item.title %>"/>
         <%- getValidationError('title') %>
         <% } else { %>
         <span class="value"><%= item.title %></span>
@@ -44,8 +43,7 @@
       <div class="readWriteField <%= getValidationErrorClass('description') %>">
         <label class="title">Description:</label>
         <% if(editable) { %>
-        <textarea type="text" class="value" name="description" style="width: 400px; height: 200px;"><%=
-          previousValues.description || item.description %></textarea>
+        <textarea type="text" class="value" name="description" style="width: 400px; height: 200px;"><%= item.description %></textarea>
         <%- getValidationError('description') %>
         <% } else { %>
         <pre class="value"><%= item.description %></pre>
@@ -56,7 +54,7 @@
       <div class="readWriteField <%= getValidationErrorClass('keywords') %>">
         <label class="title">Keywords:</label>
         <% if(editable) { %>
-        <input type="text" class="value" name="keywords" value="<%= previousValues.keywords || item.keywords %>"/>
+        <input type="text" class="value" name="keywords" value="<%= item.keywords %>"/>
         <%- getValidationError('keywords') %>
         <% } else { %>
         <span class="value"><%= item.keywords %></span>
