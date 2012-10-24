@@ -18,13 +18,13 @@
 
       <!-- Description -->
       <% if(editable) { %>
-      <div class="readWriteField <%= getValidationErrorClass('text') %>">
+      <div class="readWriteField <%= getValidationErrorClass('code') %>">
         <label class="title">KiCad Code:</label>
-        <textarea type="text" class="value" name="text" id="text" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%=
-          previousValues.text || item.text %></textarea>
+        <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%=
+          previousValues.code || item.code %></textarea>
 
         <div id="codeErrors" class="codeErrors"></div>
-        <%- getValidationError('text') %>
+        <%- getValidationError('code') %>
       </div>
       <% } %>
     </div>
@@ -163,7 +163,7 @@
   }
 
   function updateRender() {
-    render($('#text').val());
+    render($('#code').val());
   }
 
   function render(data) {

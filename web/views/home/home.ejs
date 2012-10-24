@@ -19,7 +19,7 @@
   var defaultValue = {
     id: 0,
     title: 'Loading...',
-    text: '',
+    code: '',
     createdBy: 'Loading...',
     createdByUserId: 0,
     modifiedDate: 'Loading...',
@@ -50,7 +50,7 @@
       $('#recentSchematicSymbols').html(html);
 
       data.forEach(function(item) {
-        renderSchematicSymbol('#recentItem_schematicSymbol_' + item.id, item.text, {
+        renderSchematicSymbol('#recentItem_schematicSymbol_' + item.id, item.code, {
           size: 130
         });
       });
@@ -64,7 +64,7 @@
       });
       $('#recentPcbModules').html(html);
       data.forEach(function(item) {
-        renderPcbModule('#recentItem_pcbModule_' + item.id, item.text, {
+        renderPcbModule('#recentItem_pcbModule_' + item.id, item.code, {
           size: 130
         });
       });
