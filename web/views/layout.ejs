@@ -20,18 +20,45 @@
             <ul class="nav">
                 <li class="active"><a href="/">Home</a></li>
             </ul>
-            <div class="loginHeader">
-                <% if(session.user) { %>
-                    <div class="loginHeaderUsername"><%= session.user.name %></div>
-                    <a class="btn btn-small btn-primary" href="/user/logout" title="Log out of SchematicDepot">Log Out</a>
-                <% } else { %>
-                    <form class="form-inline" action="/user/login" method="POST">
-                        <input type="text" name="username" class="input-small" placeholder="Username"/>
-                        <input type="password" name="password" class="input-small" placeholder="Password"/>
-                        <input type="submit" class="btn btn-small btn-primary" href="/user/login" title="Log in to SchematicDepot" value="Log In"/>
+            <ul class="nav pull-right">
+              <% if(session.user) { %>
+                <li class="dropdown userInfoDrop">
+                  <a href="#" id="userInfoDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="navUsername"><%= session.user.username %></span><b class="caret"></b></a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="userInfoDropButton">
+                    <li>
+                      <a href="/user/<%= session.user.id %>" class="accountSummary">
+                        <div class="content">
+                          <div class="account-group">
+                            <img class="avatar" src="<%= session.user.gravatarUrl %>">
+                            <b class="fullname"><%= session.user.username %></b>
+                            <small class="metadata">Edit profile</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dropdown-divider"></li>
+                    <li><a href="/user/logout" title="Log out of SchematicDepot">Log Out</a></li>
+                  </ul>
+                </li>
+              <% } else { %>
+                <li class="dropdown">
+                  <a href="#" id="loginDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown">Log In<b class="caret"></b></a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="loginDropButton">
+                    <form action="/user/login" class="loginDrop" method="POST">
+                      <fieldset class="textbox">
+                        <label>Username or email</label>
+                        <input type="text" name="username" placeholder="Username"/>
+
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Password"/>
+
+                        <input type="submit" class="btn submit pull-right" href="/user/login" title="Log in to SchematicDepot" value="Log In"/>
+                      </fieldset>
                     </form>
-                <% } %>
-            </div>
+                  </ul>
+                </li>
+              <% } %>
+            </ul>
         </div>
     </div>
 </div>
