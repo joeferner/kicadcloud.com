@@ -6,7 +6,7 @@
     </div>
     <div class="moreInfo">
       <div class="readonlyField">
-        <span class="title">Created By:</span><span class="value"><a href="/user/<%= createdByUserId %>"><%= createdBy %></a></span>
+        <span class="title">Created By:</span><span class="value"><a href="/user/<%= createdBy.id %>"><%= createdBy.username %></a></span>
       </div>
       <div class="readonlyField">
         <span class="title">Modified Date:</span><span class="value"><%= sf('{0:MM/dd/yyyy}', new Date(modifiedDate)) %></span>

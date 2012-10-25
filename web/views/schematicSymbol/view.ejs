@@ -16,7 +16,7 @@
     <div class="span4">
       <div id="svgContainer"></div>
 
-      <!-- Description -->
+      <!-- Code -->
       <% if(editable) { %>
       <div class="readWriteField <%= getValidationErrorClass('code') %>">
         <label class="title">KiCad Code:</label>
@@ -63,8 +63,8 @@
 
       <!-- Created By -->
       <div class="readonlyField">
-        <span class="title">Created By:</span><span class="value"><a href="/user/<%= item.createdByUserId %>"><%=
-        item.createdBy %></a></span>
+        <span class="title">Created By:</span><span class="value"><a href="/user/<%= item.createdBy.id %>"><%=
+        item.createdBy.username %></a></span>
       </div>
 
       <!-- Modified Date -->
