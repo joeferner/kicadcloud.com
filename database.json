@@ -3,7 +3,8 @@
 
   "dev": {
     "driver": "sqlite3",
-    "filename": "./dev.db"
+    "filename": "./dev.db",
+    "trace": "true"
   },
 
   "test": {
