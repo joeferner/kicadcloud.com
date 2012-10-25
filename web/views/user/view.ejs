@@ -1,7 +1,7 @@
 <form action="/user/<%= item.id %>" method="POST">
   <div class="row">
     <div class="span1">
-      <img class="avatar" width="64" height="64" src="<%= item.gravatarUrl %>">
+      <img class="avatar" width="64" height="64" src="<%= item.getGravatarUrl({s:64}) %>">
     </div>
     <div class="span11">
       <!-- Name -->
