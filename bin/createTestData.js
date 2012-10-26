@@ -18,5 +18,7 @@ persist.connect(function(err, conn) {
     if (err) {
       throw err;
     }
+
+    conn.close();
   });
 });

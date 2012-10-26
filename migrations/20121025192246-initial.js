@@ -14,8 +14,9 @@ exports.up = function (db, callback) {
       'verified': type.INTEGER
     }),
 
-    db.createTable.bind(db, 'schematicSymbols', {
+    db.createTable.bind(db, 'edaItems', {
       'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
+      'type': type.INTEGER,
       'title': type.STRING,
       'description': type.STRING,
       'keywords': type.STRING,
@@ -26,53 +27,22 @@ exports.up = function (db, callback) {
       'modified_date': type.DATE_TIME
     }),
 
-    db.createTable.bind(db, 'schematicSymbolComments', {
+    db.createTable.bind(db, 'edaItemComments', {
       'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
-      'schematic_symbol_id': type.INTEGER,
+      'eda_item_id': type.INTEGER,
       'body': type.TEXT,
       'created_by': type.INTEGER,
       'created_date': type.DATE_TIME
     }),
 
-    db.createTable.bind(db, 'pcbModules', {
-      'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
-      'title': type.STRING,
-      'description': type.STRING,
-      'keywords': type.STRING,
-      'code': type.TEXT,
-      'created_by': type.INTEGER,
-      'created_date': type.DATE_TIME,
-      'modified_by': type.INTEGER,
-      'modified_date': type.DATE_TIME
-    }),
-
-    db.createTable.bind(db, 'pcbModuleComments', {
-      'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
-      'pcb_module_id': type.INTEGER,
-      'body': type.TEXT,
-      'created_by': type.INTEGER,
-      'created_date': type.DATE_TIME
-    }),
-
-    db.createTable.bind(db, 'userFavoriteSchematicSymbols', {
+    db.createTable.bind(db, 'userFavoriteEdaItems', {
       'user_id': {type: type.INTEGER, primaryKey: true },
-      'schematic_symbol_id': {type: type.INTEGER, primaryKey: true }
+      'eda_item_id': {type: type.INTEGER, primaryKey: true }
     }),
 
-    db.createTable.bind(db, 'userFavoritePcbModules', {
+    db.createTable.bind(db, 'userVoteEdaItems', {
       'user_id': {type: type.INTEGER, primaryKey: true },
-      'pcb_module_id': {type: type.INTEGER, primaryKey: true }
-    }),
-
-    db.createTable.bind(db, 'userVoteSchematicSymbols', {
-      'user_id': {type: type.INTEGER, primaryKey: true },
-      'schematic_symbol_id': {type: type.INTEGER, primaryKey: true },
-      'vote': type.INTEGER
-    }),
-
-    db.createTable.bind(db, 'userVotePcbModules', {
-      'user_id': {type: type.INTEGER, primaryKey: true },
-      'pcb_module_id': {type: type.INTEGER, primaryKey: true },
+      'eda_item_id': {type: type.INTEGER, primaryKey: true },
       'vote': type.INTEGER
     })
   ], callback);
@@ -80,14 +50,10 @@ exports.up = function (db, callback) {
 
 exports.down = function (db, callback) {
   async.series([
-    db.dropTable.bind(db, 'userVotePcbModules'),
-    db.dropTable.bind(db, 'userVoteSchematicSymbols'),
-    db.dropTable.bind(db, 'userFavoritePcbModules'),
-    db.dropTable.bind(db, 'userFavoriteSchematicSymbols'),
-    db.dropTable.bind(db, 'pcbModuleComments'),
-    db.dropTable.bind(db, 'pcbModules'),
-    db.dropTable.bind(db, 'schematicSymbolComments'),
-    db.dropTable.bind(db, 'schematicSymbols'),
+    db.dropTable.bind(db, 'userVoteEdaItems'),
+    db.dropTable.bind(db, 'userFavoriteEdaItems'),
+    db.dropTable.bind(db, 'edaItemComments'),
+    db.dropTable.bind(db, 'edaItems'),
     db.dropTable.bind(db, 'users')
   ], callback);
 };

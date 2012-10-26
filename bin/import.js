@@ -77,7 +77,8 @@ function importPcbModules(conn, userId, modules, callback) {
 }
 
 function importPcbModule(conn, userId, pcbModule, callback) {
-  var s = new models.PcbModule();
+  var s = new models.EdaItem();
+  s.type = models.EdaItem.types.pcbModule;
   s.title = pcbModule.name;
   s.description = 'Imported from ' + path.basename(args.in);
   s.keywords = '';
@@ -96,7 +97,8 @@ function importSchematicSymbols(conn, userId, schematicSymbols, callback) {
 }
 
 function importSchematicSymbol(conn, userId, schematicSymbol, callback) {
-  var s = new models.SchematicSymbol();
+  var s = new models.EdaItem();
+  s.type = models.EdaItem.types.schematicSymbol;
   s.title = schematicSymbol.name;
   s.description = 'Imported from ' + path.basename(args.in);
   s.keywords = '';

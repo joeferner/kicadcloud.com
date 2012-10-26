@@ -1,5 +1,5 @@
-<form action="/pcbModule/<%= item.id %>" method="POST">
-  <div class="row pcbModule">
+<form action="/schematicSymbol/<%= item.id %>" method="POST">
+  <div class="row schematicSymbol">
     <div class="span1">
       <% if(item.id !== 'new') { %>
       <div class="vote">
@@ -75,15 +75,15 @@
       <!-- Actions -->
       <% if(editable) { %>
       <br/>
-      <input type="submit" class="btn btn-primary" href="/pcbModule/<%= item.id %>" title="Save" value="Save"/>
+      <input type="submit" class="btn btn-primary" href="/schematicSymbol/<%= item.id %>" title="Save" value="Save"/>
       <% } %>
     </div>
   </div>
 </form>
 
 <script type="text/javascript">
-  var pcbModuleId = '<%= item.id %>';
-  var isLoggedIn = <%= session.user ? true : false %>;
+  var schematicSymbolId = '<%= item.id %>';
+  var isLoggedIn = '<%= session.user ? true : false %>' == 'true';
 
   $(function() {
     $('#voteUp').click(function() {
@@ -91,7 +91,7 @@
         var state = getUpDownState();
         var newState = state === 'up' ? 'none' : 'up';
         changeUpDownState(newState);
-        $.post('/pcbModule/' + pcbModuleId + '/vote', { state: newState }, function(data) {
+        $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
           changeUpDownCount(data.voteCount);
         });
       } else {
@@ -104,7 +104,7 @@
         var state = getUpDownState();
         var newState = state === 'down' ? 'none' : 'down';
         changeUpDownState(newState);
-        $.post('/pcbModule/' + pcbModuleId + '/vote', { state: newState }, function(data) {
+        $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
           changeUpDownCount(data.voteCount);
         });
       } else {
@@ -117,11 +117,11 @@
         var state = getFavoriteState();
         var newState = !state;
         changeFavoriteState(newState);
-        $.post('/pcbModule/' + pcbModuleId + '/favorite', { state: newState }, function(data) {
+        $.post('/schematicSymbol/' + schematicSymbolId + '/favorite', { state: newState }, function(data) {
           changeFavoriteCount(data.favoriteCount);
         });
       } else {
-        myAlert("info", "You must be logged in to favorite a PCB module.");
+        myAlert("info", "You must be logged in to favorite a schematic symbol.");
       }
     });
   });
@@ -184,7 +184,7 @@
     var codeErrors = $('#codeErrors');
     try {
       codeErrors.text('');
-      renderPcbModule('#svgContainer', data, {
+      renderSchematicSymbol('#svgContainer', data, {
         size: 360
       });
     } catch (e) {
