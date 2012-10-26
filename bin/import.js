@@ -58,6 +58,7 @@ function run(callback) {
         var mod = kicad2svg.modParser(code);
         return importPcbModules(conn, userId, mod, callback);
       } catch (ex) {
+        console.log("could not parse as pcb module", ex.stack);
         try {
           var lib = kicad2svg.libParser(code);
           return importSchematicSymbols(conn, userId, lib, callback);
@@ -70,7 +71,22 @@ function run(callback) {
 }
 
 function importPcbModules(conn, userId, modules, callback) {
-  console.log(modules);
+  return async.forEachSeries(Object.keys(modules.modules), function(key, callback) {
+    return importPcbModule(conn, userId, modules.modules[key], callback);
+  }, callback);
+}
+
+function importPcbModule(conn, userId, pcbModule, callback) {
+  var s = new models.PcbModule();
+  s.title = pcbModule.name;
+  s.description = 'Imported from ' + path.basename(args.in);
+  s.keywords = '';
+  s.code = pcbModule.original;
+  s.createdBy = userId;
+  s.createdDate = Date.now();
+  s.modifiedBy = userId;
+  s.modifiedDate = Date.now();
+  return s.save(conn, callback);
 }
 
 function importSchematicSymbols(conn, userId, schematicSymbols, callback) {
@@ -80,7 +96,7 @@ function importSchematicSymbols(conn, userId, schematicSymbols, callback) {
 }
 
 function importSchematicSymbol(conn, userId, schematicSymbol, callback) {
-  var s = new models.SchematicSymbols();
+  var s = new models.SchematicSymbol();
   s.title = schematicSymbol.name;
   s.description = 'Imported from ' + path.basename(args.in);
   s.keywords = '';
