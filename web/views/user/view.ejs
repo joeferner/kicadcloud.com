@@ -31,5 +31,59 @@
       <% } %>
     </div>
   </div>
+
+  <% if(editable) { %>
+    <br/>
+    <br/>
+
+    <div class="row">
+      <div class="span12">
+        <ul id="userTabs" class="nav nav-tabs">
+          <li class="active">
+            <a href="#favorites" data-toggle="tab" id="favoritesTab">Favorites</a>
+          </li>
+          <li>
+            <a href="#projects" data-toggle="tab" id="projectsTab">Projects</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="favorites">Loading...</div>
+          <div class="tab-pane" id="projects">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      $(function() {
+        loadTab('favorites');
+
+        $('#userTabs a[data-toggle="tab"]').on('shown', function (e) {
+          switch(e.target.id) {
+          case 'favoritesTab':
+            loadTab('favorites');
+            break;
+          case 'projectsTab':
+            loadTab('projects');
+            break;
+          default:
+            console.error("Invalid tab id:", e.target.id);
+          }
+        });
+      });
+
+      function loadTab(tab) {
+        var tabElem = $('#' + tab);
+        if(!tabElem.attr('loaded')) {
+          tabElem.html('Loading...');
+          $.get('/user/<%= item.id %>/' + tab, function(data) {
+            tabElem.attr('loaded', 'true');
+            tabElem.html(data);
+            renderEdaItems(tabElem);
+          });
+        }
+      }
+    </script>
+  <% } %>
 </form>
 

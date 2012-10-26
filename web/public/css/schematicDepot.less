@@ -20,6 +20,10 @@ body {
   border-bottom: 1px solid #DDD;
 }
 
+table td.noTopBorder {
+  border-top: 0;
+}
+
 /******** votes **************/
 .voteCount {
   display: block;
@@ -231,4 +235,34 @@ ul.recentItems li .moreInfo {
 
 ul.recentItems li:hover .moreInfo {
   display: block;
+}
+
+/******* eda item list ******/
+.edaItemList tr,
+.edaItemList td {
+  cursor: pointer;
+}
+
+.listItemSvg {
+  float: left;
+  border: 1px solid #eee;
+  padding: 3px;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  .rounded(3px);
+}
+
+.edaItemTitle {
+  font-weight: bold;
+}
+
+.edaItemCreatedBy {
+  color: #333;
+}
+
+.edaItemDescription {
+  margin-left: 130px;
+  height: 50px;
+  overflow: auto;
 }

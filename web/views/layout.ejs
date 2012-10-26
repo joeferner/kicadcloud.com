@@ -18,7 +18,10 @@
             <a class="brand" href="/">SchematicDepot</a>
 
             <ul class="nav">
-                <li class="active"><a href="/">Home</a></li>
+              <li class="<%= activeNav == 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
+              <% if(session.user) { %>
+                <li class="<%= activeNav == 'myStuff' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">My Stuff</a></li>
+              <% } %>
             </ul>
             <ul class="nav pull-right">
               <% if(session.user) { %>
