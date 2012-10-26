@@ -44,19 +44,12 @@ exports.up = function (db, callback) {
       'user_id': {type: type.INTEGER, primaryKey: true },
       'eda_item_id': {type: type.INTEGER, primaryKey: true },
       'vote': type.INTEGER
-    }),
-
-    db.createTable.bind(db, 'projects', {
-      'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
-      'user_id': type.INTEGER,
-      'title': type.STRING
     })
   ], callback);
 };
 
 exports.down = function (db, callback) {
   async.series([
-    db.dropTable.bind(db, 'projects'),
     db.dropTable.bind(db, 'userVoteEdaItems'),
     db.dropTable.bind(db, 'userFavoriteEdaItems'),
     db.dropTable.bind(db, 'edaItemComments'),
