@@ -54,23 +54,23 @@ exports.up = function (db, callback) {
       'created_date': type.DATE_TIME
     }),
 
-    db.createTable.bind(db, 'userFavoriteSchematicSymbol', {
+    db.createTable.bind(db, 'userFavoriteSchematicSymbols', {
       'user_id': {type: type.INTEGER, primaryKey: true },
       'schematic_symbol_id': {type: type.INTEGER, primaryKey: true }
     }),
 
-    db.createTable.bind(db, 'userFavoritePcbModule', {
+    db.createTable.bind(db, 'userFavoritePcbModules', {
       'user_id': {type: type.INTEGER, primaryKey: true },
       'pcb_module_id': {type: type.INTEGER, primaryKey: true }
     }),
 
-    db.createTable.bind(db, 'userVoteSchematicSymbol', {
+    db.createTable.bind(db, 'userVoteSchematicSymbols', {
       'user_id': {type: type.INTEGER, primaryKey: true },
       'schematic_symbol_id': {type: type.INTEGER, primaryKey: true },
       'vote': type.INTEGER
     }),
 
-    db.createTable.bind(db, 'userVotePcbModule', {
+    db.createTable.bind(db, 'userVotePcbModules', {
       'user_id': {type: type.INTEGER, primaryKey: true },
       'pcb_module_id': {type: type.INTEGER, primaryKey: true },
       'vote': type.INTEGER
@@ -80,10 +80,10 @@ exports.up = function (db, callback) {
 
 exports.down = function (db, callback) {
   async.series([
-    db.dropTable.bind(db, 'userVotePcbModule'),
-    db.dropTable.bind(db, 'userVoteSchematicSymbol'),
-    db.dropTable.bind(db, 'userFavoritePcbModule'),
-    db.dropTable.bind(db, 'userFavoriteSchematicSymbol'),
+    db.dropTable.bind(db, 'userVotePcbModules'),
+    db.dropTable.bind(db, 'userVoteSchematicSymbols'),
+    db.dropTable.bind(db, 'userFavoritePcbModules'),
+    db.dropTable.bind(db, 'userFavoriteSchematicSymbols'),
     db.dropTable.bind(db, 'pcbModuleComments'),
     db.dropTable.bind(db, 'pcbModules'),
     db.dropTable.bind(db, 'schematicSymbolComments'),

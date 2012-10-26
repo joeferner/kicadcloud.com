@@ -15,3 +15,7 @@ function renderSchematicSymbol(targetSelector, schematicSymbolCode, options) {
   var svg = kicad2svg.libToSvg(lib, options);
   $(targetSelector).html(svg);
 }
+
+function myAlert(level, message) {
+  alert(message);
+}

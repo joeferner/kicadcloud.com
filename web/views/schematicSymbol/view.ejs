@@ -3,9 +3,9 @@
     <div class="span1">
       <% if(item.id !== 'new') { %>
       <div class="vote">
-        <a id="voteUp" class="<%= item.isUpVote ? 'voteUpOn' : 'voteUpOff' %>" href="javascript:">up vote</a>
-        <span id="voteCount" class="voteCount"><%= item.upVoteCount || 0 %></span>
-        <a id="voteDown" class="<%= item.isDownVote ? 'voteDownOn' : 'voteDownOff' %>" href="javascript:">down vote</a>
+        <a id="voteUp" class="<%= item.vote == 1 ? 'voteUpOn' : 'voteUpOff' %>" href="javascript:">up vote</a>
+        <span id="voteCount" class="voteCount"><%= item.voteCount || 0 %></span>
+        <a id="voteDown" class="<%= item.vote == -1 ? 'voteDownOn' : 'voteDownOff' %>" href="javascript:">down vote</a>
 
         <a id="favorite" class="<%= item.isFavorite ? 'favoriteOn' : 'favoriteOff' %>" href="javascript:">favorite</a>
 
@@ -83,33 +83,46 @@
 
 <script type="text/javascript">
   var schematicSymbolId = '<%= item.id %>';
+  var isLoggedIn = <%= session.user ? true : false %>;
 
   $(function() {
     $('#voteUp').click(function() {
-      var state = getUpDownState();
-      var newState = state === 'up' ? 'none' : 'up';
-      changeUpDownState(newState);
-      $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
-        changeUpDownCount(data.upVoteCount);
-      });
+      if(isLoggedIn) {
+        var state = getUpDownState();
+        var newState = state === 'up' ? 'none' : 'up';
+        changeUpDownState(newState);
+        $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
+          changeUpDownCount(data.voteCount);
+        });
+      } else {
+        myAlert("info", "You must be logged in to vote.");
+      }
     });
 
     $('#voteDown').click(function() {
-      var state = getUpDownState();
-      var newState = state === 'down' ? 'none' : 'down';
-      changeUpDownState(newState);
-      $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
-        changeUpDownCount(data.upVoteCount);
-      });
+      if(isLoggedIn) {
+        var state = getUpDownState();
+        var newState = state === 'down' ? 'none' : 'down';
+        changeUpDownState(newState);
+        $.post('/schematicSymbol/' + schematicSymbolId + '/vote', { state: newState }, function(data) {
+          changeUpDownCount(data.voteCount);
+        });
+      } else {
+        myAlert("info", "You must be logged in to vote.");
+      }
     });
 
     $('#favorite').click(function() {
-      var state = getFavoriteState();
-      var newState = !state;
-      changeFavoriteState(newState);
-      $.post('/schematicSymbol/' + schematicSymbolId + '/favorite', { state: newState }, function(data) {
-        changeFavoriteCount(data.favoriteCount);
-      });
+      if(isLoggedIn) {
+        var state = getFavoriteState();
+        var newState = !state;
+        changeFavoriteState(newState);
+        $.post('/schematicSymbol/' + schematicSymbolId + '/favorite', { state: newState }, function(data) {
+          changeFavoriteCount(data.favoriteCount);
+        });
+      } else {
+        myAlert("info", "You must be logged in to favorite a schematic symbol.");
+      }
     });
   });
 
