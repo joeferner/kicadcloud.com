@@ -20,7 +20,7 @@
             <ul class="nav">
               <li class="<%= activeNav == 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
               <% if(session.user) { %>
-                <li class="<%= activeNav == 'myStuff' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">My Stuff</a></li>
+                <li class="<%= activeNav == 'me' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">Me</a></li>
               <% } %>
             </ul>
             <ul class="nav pull-right">

@@ -43,13 +43,13 @@
             <a href="#favorites" data-toggle="tab" id="favoritesTab">Favorites</a>
           </li>
           <li>
-            <a href="#projects" data-toggle="tab" id="projectsTab">Projects</a>
+            <a href="#items" data-toggle="tab" id="itemsTab">My Items</a>
           </li>
         </ul>
 
         <div class="tab-content">
           <div class="tab-pane active" id="favorites">Loading...</div>
-          <div class="tab-pane" id="projects">Loading...</div>
+          <div class="tab-pane" id="items">Loading...</div>
         </div>
       </div>
     </div>
@@ -63,8 +63,8 @@
           case 'favoritesTab':
             loadTab('favorites');
             break;
-          case 'projectsTab':
-            loadTab('projects');
+          case 'itemsTab':
+            loadTab('items');
             break;
           default:
             console.error("Invalid tab id:", e.target.id);
