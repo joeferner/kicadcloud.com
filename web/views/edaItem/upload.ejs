@@ -1,0 +1,128 @@
+<form action="/edaItem/upload" method="POST">
+  <div class="row">
+    <div class="span3">
+      <input type="file" id="fileInput"/>
+    </div>
+    <div class="span3">
+      <select id="itemList" name="itemList" multiple="multiple" size="20" disabled="disabled">
+
+      </select>
+    </div>
+    <div class="span6">
+      <div id="itemDetailsList">
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="span12">
+      <input type="submit" class="btn btn-primary" href="/edaItem/upload" title="Upload" value="Upload"/>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+  var kicad2svg = document.require('kicad2svg');
+
+  $(function() {
+    $('#fileInput').change(function(evt) {
+      var files = evt.target.files;
+      if (files.length != 1) {
+        return myAlert('error', 'Unexpected file upload.');
+      }
+      var file = files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var content = e.target.result;
+        loadFileContent(file, content);
+      };
+      return reader.readAsBinaryString(file);
+    });
+
+    $('#itemList').change(function() {
+      updateItemDetailsList($('#itemList').val());
+    });
+  });
+
+  function loadFileContent(file, content) {
+    try {
+      var mod = kicad2svg.modParser(content);
+      loadMod(file, mod);
+    } catch (modParserEx) {
+      console.error(modParserEx);
+      try {
+        var lib = kicad2svg.libParser(content);
+        loadLib(file, lib);
+      } catch (libParserEx) {
+        console.error(libParserEx);
+        myAlert('error', 'Could not parse file.');
+      }
+    }
+  }
+
+  function loadMod(file, mod) {
+    myAlert('error', 'not implemented');
+  }
+
+  function loadLib(file, lib) {
+    var itemList = $('#itemList');
+    var itemDetailsList = $('#itemDetailsList');
+
+    var selectHtml = Object.keys(lib.symbols)
+        .map(function(symbolKey, i) {
+          return "<option value='" + i + "'>" + symbolKey + "</option>";
+        })
+        .join('\n');
+    itemList.html(selectHtml);
+    itemList.removeAttr('disabled');
+
+    var detailsHtml = Object.keys(lib.symbols)
+        .map(function(symbolKey, i) {
+          var symbol = lib.symbols[symbolKey];
+          var result = "<div style='display: none;' class='itemDetails' id='itemDetail_" + i + "'>";
+
+          // title
+          result += "<div class='readWriteField'>";
+          result += "<label class='title'>Title:</label>";
+          result += "<input type='text' class='value' name='title_" + i + "' value='" + symbolKey + "'/>";
+          result += "</div>";
+
+          // description
+          result += "<div class='readWriteField'>";
+          result += "<label class='title'>Description:</label>";
+          result += "<textarea class='value' name='description_" + i + "'>Imported from " + file.name + "</textarea>";
+          result += "</div>";
+
+          // keywords
+          result += "<div class='readWriteField'>";
+          result += "<label class='title'>Keywords:</label>";
+          result += "<input type='text' class='value' name='keywords_" + i + "' value=''/>";
+          result += "</div>";
+
+          // code
+          result += "<textarea class='value' style='display: none;' name='code_" + i + "'>" + symbol.original + "</textarea>";
+
+          result += "<hr/>";
+
+          result += "</div>";
+          return result;
+        })
+        .join('\n');
+    itemDetailsList.html(detailsHtml);
+
+    updateItemDetailsList([]);
+  }
+
+  function updateItemDetailsList(items) {
+    $('#itemDetailsList .itemDetails').each(function(i, elem) {
+      elem = $(elem);
+      var id = elem.attr('id');
+      var symbolName = id.match(/itemDetail_(.*)/)[1];
+      if (items.indexOf(symbolName) >= 0) {
+        elem.show();
+      } else {
+        elem.hide();
+      }
+    });
+  }
+</script>
