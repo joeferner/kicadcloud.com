@@ -27,7 +27,8 @@
     "gravatar": "~1.0.6",
     "db-migrate": "~0.2.5",
     "sqlite3": "~2.1.5",
-    "persist": "git://github.com/nearinfinity/node-persist.git"
+    "persist": "git://github.com/nearinfinity/node-persist.git",
+    "java": "git://github.com/nearinfinity/node-java.git"
   },
   "devDependencies": {
     "nodeunit": "~0.7.4"

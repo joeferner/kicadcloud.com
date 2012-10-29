@@ -1,4 +1,5 @@
 /build/*
+/luceneIndex
 node_modules
 *.node
 *.sh
