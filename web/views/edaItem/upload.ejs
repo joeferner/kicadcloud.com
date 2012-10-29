@@ -1,7 +1,8 @@
-<form action="/edaItem/upload" method="POST">
+<form id="uploadForm" action="/edaItem/upload" method="POST">
   <div class="row">
     <div class="span3">
       <input type="file" id="fileInput"/>
+      <input type="hidden" name="fileType" id="fileType"/>
     </div>
     <div class="span3">
       <select id="itemList" name="itemList" multiple="multiple" size="20" disabled="disabled">
@@ -25,6 +26,8 @@
   var kicad2svg = document.require('kicad2svg');
 
   $(function() {
+    $('#uploadForm').submit(submitForm);
+
     $('#fileInput').change(function(evt) {
       var files = evt.target.files;
       if (files.length != 1) {
@@ -61,10 +64,13 @@
   }
 
   function loadMod(file, mod) {
+    $('#fileType').val(EdaItem.types.pcbModule);
     myAlert('error', 'not implemented');
   }
 
   function loadLib(file, lib) {
+    $('#fileType').val(EdaItem.types.schematicSymbol);
+
     var itemList = $('#itemList');
     var itemDetailsList = $('#itemDetailsList');
 
@@ -84,23 +90,23 @@
           // title
           result += "<div class='readWriteField'>";
           result += "<label class='title'>Title:</label>";
-          result += "<input type='text' class='value' name='title_" + i + "' value='" + symbolKey + "'/>";
+          result += "<input type='text' class='value' id='title_" + i + "' name='title_" + i + "' value='" + symbolKey + "'/>";
           result += "</div>";
 
           // description
           result += "<div class='readWriteField'>";
           result += "<label class='title'>Description:</label>";
-          result += "<textarea class='value' name='description_" + i + "'>Imported from " + file.name + "</textarea>";
+          result += "<textarea class='value' id='description_" + i + "' name='description_" + i + "'>Imported from " + file.name + "</textarea>";
           result += "</div>";
 
           // keywords
           result += "<div class='readWriteField'>";
           result += "<label class='title'>Keywords:</label>";
-          result += "<input type='text' class='value' name='keywords_" + i + "' value=''/>";
+          result += "<input type='text' class='value' id='keywords_" + i + "' name='keywords_" + i + "' value=''/>";
           result += "</div>";
 
           // code
-          result += "<textarea class='value' style='display: none;' name='code_" + i + "'>" + symbol.original + "</textarea>";
+          result += "<textarea class='value' style='display: none;' id='code_" + i + "' name='code_" + i + "'>" + symbol.original + "</textarea>";
 
           result += "<hr/>";
 
@@ -124,5 +130,30 @@
         elem.hide();
       }
     });
+  }
+
+  function submitForm() {
+    var data = getDataToSubmit();
+    $.post('/edaItem/upload', data,function(data) {
+      document.location.href = '/';
+    }).error(function(res) {
+          myAlert('error', res.responseText);
+        });
+    return false;
+  }
+
+  function getDataToSubmit() {
+    var result = {
+      ajax: true,
+      fileType: $('#fileType').val()
+    };
+    result.itemList = $('#itemList').val();
+    result.itemList.forEach(function(itemName) {
+      result['title_' + itemName] = $('#title_' + itemName).val();
+      result['description_' + itemName] = $('#description_' + itemName).val();
+      result['keywords_' + itemName] = $('#keywords_' + itemName).val();
+      result['code_' + itemName] = $('#code_' + itemName).val();
+    });
+    return result;
   }
 </script>
