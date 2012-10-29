@@ -18,14 +18,13 @@ if (args.help) {
   return process.exit(-1);
 }
 
-return search.query('C', {}, function(err, items) {
-  if (err) {
-    return console.error('query', err.stack);
-  }
-  return console.log(items);
-});
+//return search.query('C', {}, function(err, items) {
+//  if (err) {
+//    return console.error('query', err.stack);
+//  }
+//  return console.log(items);
+//});
 
-/*
 run(function(err) {
   if (err) {
     console.error("Could not rebuild search index", err.stack);
@@ -40,13 +39,14 @@ function run(callback) {
       return callback(err);
     }
 
-    models.EdaItem.all(conn, function(err, items) {
+    return models.EdaItem.all(conn, function(err, items) {
       if (err) {
         return callback(err);
       }
 
       return async.forEachSeries(items, function(item, callback) {
         var text = item.title + ' ' + item.description + ' ' + item.keywords;
+        console.log('indexing item ' + item.id);
         return search.index(item.id, text, callback);
       }, function(err) {
         if (err) {
@@ -58,4 +58,3 @@ function run(callback) {
     });
   });
 }
-*/
