@@ -1,19 +1,19 @@
-<div class="recentList">
+<div class="edaItemList">
   <h2>Recent Schematic Symbols</h2>
-  <ul class="recentItems" id="recentSchematicSymbols">
+  <ul class="edaItems" id="recentSchematicSymbols">
   </ul>
 </div>
 <div style="clear: both;"/>
 
-<div class="recentList">
+<div class="edaItemList">
   <h2>Recent PCB Modules</h2>
-  <ul class="recentItems" id="recentPcbModules">
+  <ul class="edaItems" id="recentPcbModules">
   </ul>
 </div>
 <div style="clear: both;"/>
 
 <script type="text/javascript">
-  var recentItemTemplate = new EJS({url: '/templates/recentItem.ejs'});
+  var edaItemTemplate = new EJS({url: '/templates/edaItem.ejs'});
   var sf = document.require('sf');
 
   var defaultValue = {
@@ -31,14 +31,14 @@
   var recentSchematicSymbolsHtml = '';
   defaultValue.type = 'schematicSymbol';
   for (var i = 0; i < 14; i++) {
-    recentSchematicSymbolsHtml += recentItemTemplate.render(defaultValue);
+    recentSchematicSymbolsHtml += edaItemTemplate.render(defaultValue);
   }
   $('#recentSchematicSymbols').html(recentSchematicSymbolsHtml);
 
   var recentPcbModulesHtml = '';
   defaultValue.type = 'pcbModule';
   for (i = 0; i < 14; i++) {
-    recentPcbModulesHtml += recentItemTemplate.render(defaultValue);
+    recentPcbModulesHtml += edaItemTemplate.render(defaultValue);
   }
   $('#recentPcbModules').html(recentPcbModulesHtml);
 
@@ -48,13 +48,13 @@
       data.forEach(function(item) {
         item.type = 'schematicSymbol';
         item.createdBy = item.createdBy || {};
-        html += recentItemTemplate.render(item);
+        html += edaItemTemplate.render(item);
       });
       $('#recentSchematicSymbols').html(html);
 
       data.forEach(function(item) {
         try {
-          renderSchematicSymbol('#recentItem_schematicSymbol_' + item.id, item.code, {
+          renderSchematicSymbol('#edaItem_schematicSymbol_' + item.id, item.code, {
             size: 130
           });
         } catch (e) {
@@ -69,12 +69,12 @@
       data.forEach(function(item, i) {
         item.type = 'pcbModule';
         item.createdBy = item.createdBy || {};
-        html += recentItemTemplate.render(item);
+        html += edaItemTemplate.render(item);
       });
       $('#recentPcbModules').html(html);
       data.forEach(function(item) {
         try {
-          renderPcbModule('#recentItem_pcbModule_' + item.id, item.code, {
+          renderPcbModule('#edaItem_pcbModule_' + item.id, item.code, {
             size: 130
           });
         } catch (e) {

@@ -1,78 +1,97 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SchematicDepot: <%= title %></title>
-    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet"/>
-    <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>
-    <link href="/css/schematicDepot.css" rel="stylesheet"/>
-    <script src="/browserify.js"></script>
-    <script src="/ejs/ejs.js"></script>
-    <script src="/scripts/jquery-1.8.2.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.js"></script>
-    <script src="/scripts/schematicDepot.js"></script>
+  <title>SchematicDepot: <%= title %></title>
+  <link href="/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+  <link href="/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"/>
+  <link href="/css/schematicDepot.css" rel="stylesheet"/>
+  <script src="/browserify.js"></script>
+  <script src="/ejs/ejs.js"></script>
+  <script src="/scripts/jquery-1.8.2.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.js"></script>
+  <script src="/scripts/schematicDepot.js"></script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="brand" href="/">SchematicDepot</a>
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="/">SchematicDepot</a>
 
-            <ul class="nav">
-              <li class="<%= activeNav == 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
-              <% if(session.user) { %>
-                <li class="<%= activeNav == 'me' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">Me</a></li>
-                <li class="<%= activeNav == 'upload' ? 'active' : '' %>"><a href="/edaItem/upload">Upload</a></li>
-              <% } %>
+      <ul class="nav">
+        <li class="<%= activeNav == 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
+        <% if(session.user) { %>
+        <li class="<%= activeNav == 'me' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">Me</a></li>
+        <li class="<%= activeNav == 'upload' ? 'active' : '' %>"><a href="/edaItem/upload">Upload</a></li>
+        <% } %>
+      </ul>
+      <div class="pull-right">
+        <ul class="nav">
+          <% if(session.user) { %>
+          <li class="dropdown userInfoDrop">
+            <a href="#" id="userInfoDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="navUsername"><%= session.user.username %></span><b class="caret"></b></a>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="userInfoDropButton">
+              <li>
+                <a href="/user/<%= session.user.id %>" class="accountSummary">
+                  <div class="content">
+                    <div class="account-group">
+                      <img class="avatar" src="<%= session.user.gravatarUrl %>">
+                      <b class="fullname"><%= session.user.username %></b>
+                      <small class="metadata">Edit profile</small>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="dropdown-divider"></li>
+              <li><a href="/user/logout" title="Log out of SchematicDepot">Log Out</a></li>
             </ul>
-            <ul class="nav pull-right">
-              <% if(session.user) { %>
-                <li class="dropdown userInfoDrop">
-                  <a href="#" id="userInfoDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="navUsername"><%= session.user.username %></span><b class="caret"></b></a>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="userInfoDropButton">
-                    <li>
-                      <a href="/user/<%= session.user.id %>" class="accountSummary">
-                        <div class="content">
-                          <div class="account-group">
-                            <img class="avatar" src="<%= session.user.gravatarUrl %>">
-                            <b class="fullname"><%= session.user.username %></b>
-                            <small class="metadata">Edit profile</small>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dropdown-divider"></li>
-                    <li><a href="/user/logout" title="Log out of SchematicDepot">Log Out</a></li>
-                  </ul>
-                </li>
-              <% } else { %>
-                <li class="dropdown">
-                  <a href="#" id="loginDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown">Log In<b class="caret"></b></a>
-                  <ul class="dropdown-menu" role="menu" aria-labelledby="loginDropButton">
-                    <form action="/user/login" class="loginDrop" method="POST">
-                      <fieldset class="textbox">
-                        <label>Username or email</label>
-                        <input type="text" name="username" placeholder="Username"/>
+          </li>
+          <% } else { %>
+          <li class="dropdown">
+            <a href="#" id="loginDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown">Log
+              In<b class="caret"></b></a>
+            <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="loginDropButton">
+              <form action="/user/login" class="loginDrop" method="POST">
+                <fieldset class="textbox">
+                  <label>Username or email</label>
+                  <input type="text" name="username" placeholder="Username"/>
 
-                        <label>Password</label>
-                        <input type="password" name="password" placeholder="Password"/>
+                  <label>Password</label>
+                  <input type="password" name="password" placeholder="Password"/>
 
-                        <input type="submit" class="btn submit pull-right" href="/user/login" title="Log in to SchematicDepot" value="Log In"/>
-                      </fieldset>
-                    </form>
-                  </ul>
-                </li>
-              <% } %>
+                  <input type="submit" class="btn submit pull-right" href="/user/login" title="Log in to SchematicDepot" value="Log In"/>
+                </fieldset>
+              </form>
             </ul>
-        </div>
+          </li>
+          <% } %>
+        </ul>
+
+        <!-- search -->
+        <form class="formSearch focus" action="/search" id="navSearch">
+          <label class="hiddenElements" for="searchQuery">Search</label>
+          <input class="searchInput focus" type="text" id="searchQuery" placeholder="Search" name="q" autocomplete="off" spellcheck="false" data-focus="true"/>
+          <span id="searchIcon" class="searchIcon">
+            <i tabindex="0"></i>
+          </span>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 <div class="container">
-    <%- outputFlashes() %>
-    <%- body %>
-    <hr>
-    <footer>
-        <p>© SchematicDepot 2012</p>
-    </footer>
+  <%- outputFlashes() %>
+  <%- body %>
+  <hr>
+  <footer>
+    <p>© SchematicDepot 2012</p>
+  </footer>
 </div>
+<script type="text/javascript">
+  $(function() {
+    $('#searchIcon').click(function() {
+      $('#navSearch').submit();
+    });
+  });
+</script>
 </body>
 </html>

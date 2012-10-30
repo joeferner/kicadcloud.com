@@ -43,7 +43,7 @@ function renderEdaItems(root) {
   $('.edaItemSvg', root).each(function(i, elem) {
     try {
       var elemId = $(elem).attr('id');
-      var parts = elemId.match(/recentItem_([0-9]*)_([0-9]*)/);
+      var parts = elemId.match(/edaItem_([0-9]*)_([0-9]*)/);
       var type = parts[1];
       var id = parts[2];
       var code = $('#' + elemId + '_code').val();
