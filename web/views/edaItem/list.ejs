@@ -6,7 +6,9 @@
       <textarea style="display: none;" id="edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
 
       <div class="edaItemTitle"><%= item.title %></div>
+      <% if(item.createdBy) { %>
       Created By: <a href="/user/<%= item.createdBy.id %>" class="edaItemCreatedBy"><%= item.createdBy.username %></a>
+      <% } %>
 
       <div>Description:
         <div class="edaItemDescription"><%= item.description %></div>
