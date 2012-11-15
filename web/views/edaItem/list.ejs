@@ -1,19 +1,29 @@
+<% if(items.length > 0 && showDownloadLinks) { %>
+  <ul class="downloadLinks">
+    <li><a href="<%= modFileDownloadUrl %>">Download .mod File</a></li>
+    <li><a href="<%= libFileDownloadUrl %>">Download .lib File</a></li>
+  </ul>
+<% } %>
 <table class="edaItemList table table-hover">
-  <% items.forEach(function(item, i) { %>
-  <tr>
-    <td class="<%= i == 0 ? 'noTopBorder' : '' %>" onclick="navigateToEdaItem(<%= item.type %>, <%= item.id %>)">
-      <div class="edaItemSvg listItemSvg" id="edaItem_<%= item.type %>_<%= item.id %>"></div>
-      <textarea style="display: none;" id="edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
+  <% if(items.length > 0) { %>
+    <% items.forEach(function(item, i) { %>
+    <tr>
+      <td class="<%= i == 0 ? 'noTopBorder' : '' %>" onclick="navigateToEdaItem(<%= item.type %>, <%= item.id %>)">
+        <div class="edaItemSvg listItemSvg" id="edaItem_<%= item.type %>_<%= item.id %>"></div>
+        <textarea style="display: none;" id="edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
 
-      <div class="edaItemTitle"><%= item.title %></div>
-      <% if(item.createdBy) { %>
-      Created By: <a href="/user/<%= item.createdBy.id %>" class="edaItemCreatedBy"><%= item.createdBy.username %></a>
-      <% } %>
+        <div class="edaItemTitle"><%= item.title %></div>
+        <% if(item.createdBy) { %>
+        Created By: <a href="/user/<%= item.createdBy.id %>" class="edaItemCreatedBy"><%= item.createdBy.username %></a>
+        <% } %>
 
-      <div>Description:
-        <div class="edaItemDescription"><%= item.description %></div>
-      </div>
-    </td>
-  </tr>
-  <% }); %>
+        <div>Description:
+          <div class="edaItemDescription"><%= item.description %></div>
+        </div>
+      </td>
+    </tr>
+    <% }); %>
+  <% } else { %>
+    <tr><td style='border: 0;'>No Items</td></tr>
+  <% } %>
 </table>
