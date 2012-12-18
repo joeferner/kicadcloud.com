@@ -28,6 +28,8 @@ if (args.help) {
   return process.exit(-1);
 }
 
+var fileDir = path.dirname(args.in);
+
 var unitsCache;
 
 run(function(err) {
@@ -93,24 +95,42 @@ function importPcbModules(conn, userId, modules, callback) {
 }
 
 function importPcbModule(conn, userId, pcbModule, callback) {
-  return findAddUnitsId(conn, pcbModule.units, function(err, unitId) {
-    if (err) {
-      return callback(err);
+  if (pcbModule.shape3d && pcbModule.shape3d.fileName) {
+    var shape3dFileName = path.resolve(fileDir, pcbModule.shape3d.fileName);
+    if (fs.existsSync(shape3dFileName)) {
+      return fs.readFile(shape3dFileName, 'utf8', function(err, data3d) {
+        if (err) {
+          return callback(err);
+        }
+        return save(data3d);
+      });
     }
-    console.log('importing ' + pcbModule.name);
-    var s = new models.EdaItem();
-    s.type = models.EdaItem.types.pcbModule;
-    s.unitId = unitId;
-    s.title = pcbModule.name;
-    s.description = 'Imported from ' + path.basename(args.in);
-    s.keywords = '';
-    s.code = pcbModule.original;
-    s.createdBy = userId;
-    s.createdDate = Date.now();
-    s.modifiedBy = userId;
-    s.modifiedDate = Date.now();
-    return s.save(conn, callback);
-  });
+  }
+
+  return save();
+
+  function save(data3d) {
+    return findAddUnitsId(conn, pcbModule.units, function(err, unitId) {
+      if (err) {
+        return callback(err);
+      }
+      console.log('importing ' + pcbModule.name);
+      //console.log(pcbModule);
+      var s = new models.EdaItem();
+      s.type = models.EdaItem.types.pcbModule;
+      s.unitId = unitId;
+      s.title = pcbModule.name;
+      s.description = 'Imported from ' + path.basename(args.in);
+      s.keywords = '';
+      s.code = pcbModule.original;
+      s.codeWrl = data3d;
+      s.createdBy = userId;
+      s.createdDate = Date.now();
+      s.modifiedBy = userId;
+      s.modifiedDate = Date.now();
+      return s.save(conn, callback);
+    });
+  }
 }
 
 function importSchematicSymbols(conn, userId, schematicSymbols, callback) {
