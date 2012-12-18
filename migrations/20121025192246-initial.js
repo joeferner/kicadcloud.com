@@ -14,13 +14,20 @@ exports.up = function (db, callback) {
       'verified': type.INTEGER
     }),
 
+    db.createTable.bind(db, 'units', {
+      'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
+      'name': type.STRING
+    }),
+
     db.createTable.bind(db, 'edaItems', {
       'id': {type: type.INTEGER, primaryKey: true, autoIncrement: true },
       'type': type.INTEGER,
+      'unit_id': type.INTEGER,
       'title': type.STRING,
       'description': type.STRING,
       'keywords': type.STRING,
       'code': type.TEXT,
+      'code_wrl': type.TEXT,
       'created_by': type.INTEGER,
       'created_date': type.DATE_TIME,
       'modified_by': type.INTEGER,
@@ -54,6 +61,7 @@ exports.down = function (db, callback) {
     db.dropTable.bind(db, 'userFavoriteEdaItems'),
     db.dropTable.bind(db, 'edaItemComments'),
     db.dropTable.bind(db, 'edaItems'),
+    db.dropTable.bind(db, 'units'),
     db.dropTable.bind(db, 'users')
   ], callback);
 };
