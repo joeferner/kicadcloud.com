@@ -42,7 +42,9 @@
           <% } %>
         </div>
         <div class="tab-pane" id="view3d">
-          <div id="shape3dContainer"></div>
+          <div id="shape3dContainer">
+            <embed id="shape3dVrml" src="<%= item.id %>.wrl" width="400" height="300" border="0">
+          </div>
         </div>
       </div>
 
@@ -155,7 +157,14 @@
       }, 500);
     });
     $('#view3dTab').on('show', function(e) {
-      render3d();
+      var elem = $('#shape3dVrml').get(0);
+      var supportVrml = Object.keys(elem).some(function(key) {
+        return /vrml/.test(key);
+      });
+      if(!supportVrml) {
+        $('#shape3dVrml').hide();
+        render3d();
+      }
     });
   });
 
@@ -210,7 +219,7 @@
       var callbackModel = function(geometry) { createScene(geometry, 90, floor, -50, 105) };
       return loader.load(url, callbackModel);
     } catch (e) {
-      $('#shape3dContainer').html("Missing WebGL Support in your browser.");
+      $('#shape3dContainer').html("Missing WebGL or VRML Support in your browser.");
     }
 
     function createScene(geometry, x, y, z, b) {
