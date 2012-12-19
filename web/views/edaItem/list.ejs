@@ -8,8 +8,8 @@
     <% items.forEach(function(item, i) { %>
     <tr>
       <td class="<%= i == 0 ? 'noTopBorder' : '' %>" onclick="navigateToEdaItem(<%= item.type %>, <%= item.id %>)">
-        <div class="edaItemSvg listItemSvg" id="edaItem_<%= item.type %>_<%= item.id %>"></div>
-        <textarea style="display: none;" id="edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
+        <div class="edaItemSvg listItemSvg" id="<%= idPrefix %>edaItem_<%= item.type %>_<%= item.id %>"></div>
+        <textarea style="display: none;" id="<%= idPrefix %>edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
 
         <div class="edaItemTitle"><%= item.title %></div>
         <% if(item.createdBy) { %>
