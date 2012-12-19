@@ -22,7 +22,7 @@
     <div class="span4">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#view2d" data-toggle="tab" id="view2dTab">2D View</a></li>
-        <% if(item.has3d) { %>
+        <% if(item.has3d || (editable && item.type == models.EdaItem.types.pcbModule)) { %>
         <li><a href="#view3d" data-toggle="tab" id="view3dTab">3D View</a></li>
         <% } %>
       </ul>
@@ -32,19 +32,28 @@
 
           <!-- Code -->
           <% if(editable) { %>
-          <div class="readWriteField <%= getValidationErrorClass('code') %>" style="display: none;">
-            <label class="title">KiCad Code:</label>
-            <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
-
+            <div class="readWriteField <%= getValidationErrorClass('code') %>" style="display: none;">
+              <label class="title">KiCad Code:</label>
+              <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
+            </div>
+            <input type="file" id="shape2dUpload"/>
             <div id="codeErrors" class="codeErrors"></div>
             <%- getValidationError('code') %>
-          </div>
           <% } %>
         </div>
         <div class="tab-pane" id="view3d">
+          <% if(editable) { %>
+            <div class="readWriteField <%= getValidationErrorClass('codeWrl') %>" style="display: none;">
+              <label class="title">KiCad Code 3D:</label>
+              <textarea type="text" class="value" name="codeWrl" id="codeWrl" style="width: 340px; height: 200px;"><%= item.codeWrl %></textarea>
+            </div>
+          <% } %>
           <div id="shape3dContainer">
-            <embed id="shape3dVrml" src="<%= item.id %>.wrl" width="400" height="300" border="0">
+            <% if(item.id != 'new') { %>
+              <embed id="shape3dVrml" src="<%= item.id %>.wrl" width="400" height="300" border="0">
+            <% } %>
           </div>
+          <input type="file" id="shape3dUpload"/>
         </div>
       </div>
 
@@ -54,7 +63,7 @@
       <div class="readWriteField <%= getValidationErrorClass('title') %>">
         <label class="title">Title:</label>
         <% if(editable) { %>
-        <input type="text" class="value" name="title" value="<%= item.title %>"/>
+        <input type="text" class="value" name="title" id="title" value="<%= item.title %>"/>
         <%- getValidationError('title') %>
         <% } else { %>
         <span class="value"><%= item.title %></span>
@@ -103,6 +112,22 @@
     </div>
   </div>
 </form>
+
+<div id="fileItemListModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Select Item To Add</h3>
+  </div>
+  <div class="modal-body">
+    <select id="fileItemList" name="fileItemList" size="20">
+
+    </select>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <button class="btn btn-primary" id="fileItemListSelect">Select</button>
+  </div>
+</div>
 
 <script type="text/javascript">
   var enableAnimation;
@@ -157,7 +182,7 @@
       }, 500);
     });
     $('#view3dTab').on('show', function(e) {
-      var elem = $('#shape3dVrml').get(0);
+      var elem = $('#shape3dVrml').get(0) || {};
       var supportVrml = Object.keys(elem).some(function(key) {
         return /vrml/.test(key);
       });
@@ -165,6 +190,34 @@
         $('#shape3dVrml').hide();
         render3d();
       }
+    });
+
+    $('#shape2dUpload').change(function(evt) {
+      var files = evt.target.files;
+      if (files.length != 1) {
+        return myAlert('error', 'Unexpected file upload.');
+      }
+      var file = files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var content = e.target.result;
+        loadShape2dFileContent(file, content);
+      };
+      return reader.readAsBinaryString(file);
+    });
+
+    $('#shape3dUpload').change(function(evt) {
+      var files = evt.target.files;
+      if (files.length != 1) {
+        return myAlert('error', 'Unexpected file upload.');
+      }
+      var file = files[0];
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var content = e.target.result;
+        loadShape3dFileContent(file, content);
+      };
+      return reader.readAsBinaryString(file);
     });
   });
 
@@ -320,6 +373,79 @@
       console.error('Could not render', e.stack);
     }
   }
+
+  function loadShape3dFileContent(file, content) {
+    $('#codeWrl').text(content);
+    $('#shape3dContainer').html('You need to save the part before viewing the 3D render.')
+  }
+
+  function loadShape2dFileContent(file, content) {
+    try {
+      var mod = kicad2svg.modParser(content);
+      loadMod(file, mod);
+    } catch (modParserEx) {
+      console.error(modParserEx);
+      try {
+        var lib = kicad2svg.libParser(content);
+        loadLib(file, lib);
+      } catch (libParserEx) {
+        console.error(libParserEx);
+        myAlert('error', 'Could not parse file.');
+      }
+    }
+  }
+
+  function loadMod(file, mod) {
+    console.log(mod);
+    var symbolNames = Object.keys(mod.modules)
+        .map(function(symbolKey) { return symbolKey });
+    showFileItemListModal(symbolNames, function(err, selectedItem) {
+      if(err){
+        return myAlert('error', err);
+      }
+      console.log(mod.modules[selectedItem]);
+      if(!$('#title').val()) {
+        $('#title').val(mod.modules[selectedItem].name);
+      }
+      $('#type').val(EdaItem.types.pcbModule);
+      $('#code').text(mod.modules[selectedItem].original);
+      return updateRender();
+    });
+  }
+
+  function loadLib(file, lib) {
+    var symbolNames = Object.keys(lib.symbols)
+        .map(function(symbolKey) { return symbolKey });
+    showFileItemListModal(symbolNames, function(err, selectedItem) {
+      if(err){
+        return myAlert('error', err);
+      }
+      console.log(lib.symbols[selectedItem]);
+      if(!$('#title').val()) {
+        $('#title').val(lib.symbols[selectedItem].name);
+      }
+      $('#type').val(EdaItem.types.schematicSymbol);
+      $('#code').text(lib.symbols[selectedItem].original);
+      return updateRender();
+    });
+  }
+
+  function showFileItemListModal(names, callback) {
+    var selectHtml = names
+        .map(function(name) {
+          return "<option>" + name + "</option>";
+        })
+        .join('\n');
+    $('#fileItemList').html(selectHtml);
+    var handler = function() {
+      $('#fileItemListSelect').unbind('click', handler);
+      $('#fileItemListModal').modal('hide');
+      return callback(null, $('#fileItemList').val());
+    };
+    $('#fileItemListSelect').bind('click', handler);
+    $('#fileItemListModal').modal({});
+  }
+
 </script>
 <script type="text/javascript">
   // keep this in a separate block unless it has broken code.

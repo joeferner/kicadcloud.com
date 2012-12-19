@@ -21,7 +21,7 @@
         <li class="<%= activeNav == 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
         <% if(session.user) { %>
         <li class="<%= activeNav == 'me' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">Me</a></li>
-        <li class="<%= activeNav == 'upload' ? 'active' : '' %>"><a href="/edaItem/upload">Upload</a></li>
+        <li class="<%= activeNav == 'new' ? 'active' : '' %>"><a href="/edaItem/new">New Part</a></li>
         <% } %>
       </ul>
       <div class="pull-right">
