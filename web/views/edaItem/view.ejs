@@ -21,31 +21,31 @@
     </div>
     <div class="span4">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#view2d" data-toggle="tab">2D View</a></li>
+        <li class="active"><a href="#view2d" data-toggle="tab" id="view2dTab">2D View</a></li>
         <% if(item.has3d) { %>
-        <li><a href="#view3d" data-toggle="tab">3D View</a></li>
+        <li><a href="#view3d" data-toggle="tab" id="view3dTab">3D View</a></li>
         <% } %>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="view2d">
           <div id="svgContainer"></div>
+
+          <!-- Code -->
+          <% if(editable) { %>
+          <div class="readWriteField <%= getValidationErrorClass('code') %>" style="display: none;">
+            <label class="title">KiCad Code:</label>
+            <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
+
+            <div id="codeErrors" class="codeErrors"></div>
+            <%- getValidationError('code') %>
+          </div>
+          <% } %>
         </div>
         <div class="tab-pane" id="view3d">
           <div id="shape3dContainer"></div>
         </div>
       </div>
 
-      <!-- Code -->
-      <% if(editable) { %>
-      <div class="readWriteField <%= getValidationErrorClass('code') %>">
-        <label class="title">KiCad Code:</label>
-        <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%=
-          item.code %></textarea>
-
-        <div id="codeErrors" class="codeErrors"></div>
-        <%- getValidationError('code') %>
-      </div>
-      <% } %>
     </div>
     <div class="span7">
       <!-- Title -->
@@ -103,6 +103,7 @@
 </form>
 
 <script type="text/javascript">
+  var enableAnimation;
   var schematicSymbolId = '<%= item.id %>';
   var isLoggedIn = '<%= session.user ? true : false %>' == 'true';
 
@@ -146,14 +147,20 @@
       }
     });
 
-    $('a[data-toggle="tab"]').on('show', function(e) {
-      console.log(e);
+    $('#view2dTab').on('show', function(e) {
+      console.log('cancel 3d');
+      enableAnimation = false;
+      setTimeout(function() {
+        $('#shape3dContainer').html('');
+      }, 500);
     });
-
-    render3d();
+    $('#view3dTab').on('show', function(e) {
+      render3d();
+    });
   });
 
   function render3d() {
+    console.log('render3d');
     try {
       var url = '/pcbModule/<%= item.id %>.webgl.js';
       var width = 350;
@@ -214,10 +221,17 @@
       zmesh.scale.set(1, 1, 1);
       scene.add(zmesh);
 
-      animate();
+      enableAnimation = false;
+      setTimeout(function() {
+        enableAnimation = true;
+        animate();
+      }, 500);
     }
 
     function animate() {
+      if(!enableAnimation) {
+        return;
+      }
       requestAnimationFrame(animate);
       controls.update();
       webglRenderer.render(scene, camera);
