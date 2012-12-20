@@ -2,7 +2,7 @@
 <script src="/scripts/three.TrackballControls.js"></script>
 <script src="/scripts/three.RequestAnimationFrame.js"></script>
 
-<form action="/schematicSymbol/<%= item.id %>" method="POST">
+<form action="/edaItem/<%= item.id %>" method="POST">
   <input type="hidden" id="type" name="type" value="<%= item.type %>"/>
 
   <div class="row schematicSymbol">
@@ -35,6 +35,7 @@
             <div class="readWriteField <%= getValidationErrorClass('code') %>" style="display: none;">
               <label class="title">KiCad Code:</label>
               <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
+              <input type="hidden" id="unit" name="unit" value="<%= item.unit ? item.unit.name : '' %>"/>
             </div>
             <input type="file" id="shape2dUpload"/>
             <div id="codeErrors" class="codeErrors"></div>
@@ -107,7 +108,7 @@
       <!-- Actions -->
       <% if(editable) { %>
       <br/>
-      <input type="submit" class="btn btn-primary" href="/schematicSymbol/<%= item.id %>" title="Save" value="Save"/>
+      <input type="submit" class="btn btn-primary" href="/edaItem/<%= item.id %>" title="Save" value="Save"/>
       <% } %>
     </div>
   </div>
@@ -409,6 +410,7 @@
       }
       $('#type').val(EdaItem.types.pcbModule);
       $('#code').text(mod.modules[selectedItem].original);
+      $('#unit').val(mod.modules[selectedItem].units);
       return updateRender();
     });
   }
