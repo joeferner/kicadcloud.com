@@ -2,7 +2,9 @@
 
 'use strict';
 
+var path = require('path');
 var optimist = require('optimist');
+var databaseJson = require(path.resolve(__dirname, '../database.json'));
 
 var args = optimist
   .alias('h', 'help')
@@ -19,6 +21,10 @@ var args = optimist
     describe: 'Number of workers to run.'
   })
   .argv;
+
+if(databaseJson) {
+  args.sessionSecret = args.sessionSecret || databaseJson.sessionSecret;
+}
 
 if (args.help) {
   optimist.showHelp();
