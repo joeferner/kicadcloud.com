@@ -3,7 +3,7 @@
     <div class="span1">
       <img class="avatar" width="64" height="64" src="<%= item.getGravatarUrl({s:64}) %>">
     </div>
-    <div class="span11">
+    <div class="span3">
       <!-- Name -->
       <div class="readWriteField">
         <label class="title">Username:</label>
@@ -15,14 +15,30 @@
       </div>
 
       <!-- Email -->
-      <div class="readWriteField">
-        <label class="title">Email:</label>
-        <% if(editable) { %>
-        <input type="text" class="value" name="email" value="<%= item.email %>"/>
-        <% } else { %>
-        <span class="value"><%= item.email %></span>
-        <% } %>
-      </div>
+      <% if(editable) { %>
+        <div class="readWriteField">
+          <label class="title">Email:</label>
+          <input type="text" class="value" name="email" value="<%= item.email %>"/>
+        </div>
+      <% } %>
+
+      <!-- Password -->
+      <% if(editable) { %>
+        <div class="readWriteField">
+          <label class="title">Current Password:</label>
+          <input type="password" class="value" name="currentPassword" value=""/>
+        </div>
+
+        <div class="readWriteField">
+          <label class="title">New Password:</label>
+          <input type="password" class="value" name="newPassword" value=""/>
+        </div>
+
+        <div class="readWriteField">
+          <label class="title">New Password Verify:</label>
+          <input type="password" class="value" name="newPasswordVerify" value=""/>
+        </div>
+      <% } %>
 
       <!-- Actions -->
       <% if(editable) { %>
@@ -30,14 +46,9 @@
         <input type="submit" class="btn btn-primary" href="/user/<%= item.id %>" title="Save" value="Save"/>
       <% } %>
     </div>
-  </div>
 
-  <% if(editable) { %>
-    <br/>
-    <br/>
-
-    <div class="row">
-      <div class="span12">
+    <% if(editable) { %>
+      <div class="span8">
         <ul id="userTabs" class="nav nav-tabs">
           <li class="active">
             <a href="#favorites" data-toggle="tab" id="favoritesTab">Favorites</a>
@@ -52,38 +63,38 @@
           <div class="tab-pane" id="items">Loading...</div>
         </div>
       </div>
-    </div>
 
-    <script type="text/javascript">
-      $(function() {
-        loadTab('favorites');
+      <script type="text/javascript">
+        $(function() {
+          loadTab('favorites');
 
-        $('#userTabs a[data-toggle="tab"]').on('shown', function (e) {
-          switch(e.target.id) {
-          case 'favoritesTab':
-            loadTab('favorites');
-            break;
-          case 'itemsTab':
-            loadTab('items');
-            break;
-          default:
-            console.error("Invalid tab id:", e.target.id);
-          }
-        });
-      });
-
-      function loadTab(tab) {
-        var tabElem = $('#' + tab);
-        if(!tabElem.attr('loaded')) {
-          tabElem.html('Loading...');
-          $.get('/user/<%= item.id %>/' + tab, function(data) {
-            tabElem.attr('loaded', 'true');
-            tabElem.html(data);
-            renderEdaItems(tabElem);
+          $('#userTabs a[data-toggle="tab"]').on('shown', function (e) {
+            switch(e.target.id) {
+            case 'favoritesTab':
+              loadTab('favorites');
+              break;
+            case 'itemsTab':
+              loadTab('items');
+              break;
+            default:
+              console.error("Invalid tab id:", e.target.id);
+            }
           });
+        });
+
+        function loadTab(tab) {
+          var tabElem = $('#' + tab);
+          if(!tabElem.attr('loaded')) {
+            tabElem.html('Loading...');
+            $.get('/user/<%= item.id %>/' + tab, function(data) {
+              tabElem.attr('loaded', 'true');
+              tabElem.html(data);
+              renderEdaItems(tabElem);
+            });
+          }
         }
-      }
-    </script>
-  <% } %>
+      </script>
+    <% } %>
+  </div>
 </form>
 
