@@ -33,7 +33,8 @@
     "mkdirp": "~0.3.4",
     "bunyan": "~0.16.8",
     "forever": "~0.10.0",
-    "mysql": "~2.0.0-alpha5"
+    "mysql": "~2.0.0-alpha5",
+    "email": "~0.2.5"
   },
   "devDependencies": {
     "nodeunit": "~0.7.4"
