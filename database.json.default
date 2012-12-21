@@ -1,0 +1,20 @@
+{
+  "default": "dev",
+
+  "dev": {
+    "driver": "sqlite3",
+    "filename": "./dev.db",
+    "trace": "true"
+  },
+
+  "test": {
+    "driver": "sqlite3",
+    "filename": ":memory:"
+  },
+
+  "prod": {
+    "driver": "mysql",
+    "user": "root",
+    "password": "toor"
+  }
+}
