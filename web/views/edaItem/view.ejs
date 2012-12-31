@@ -34,7 +34,7 @@
           <% if(editable) { %>
             <div class="readWriteField <%= getValidationErrorClass('code') %>" style="display: none;">
               <label class="title">KiCad Code:</label>
-              <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
+              <textarea type="text" class="value" name="code" id="code" style="width: 340px; height: 200px; white-space: normal;" onchange="updateRender();" onkeyup="updateRender();"><%= item.code %></textarea>
               <input type="hidden" id="unit" name="unit" value="<%= item.unit ? item.unit.name : '' %>"/>
             </div>
             <input type="file" id="shape2dUpload"/>
