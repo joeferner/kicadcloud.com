@@ -8,17 +8,19 @@
     <% items.forEach(function(item, i) { %>
     <tr>
       <td class="<%= i == 0 ? 'noTopBorder' : '' %>" onclick="navigateToEdaItem(<%= item.type %>, <%= item.id %>)">
-        <div class="edaItemSvg listItemSvg" id="<%= idPrefix %>edaItem_<%= item.type %>_<%= item.id %>"></div>
-        <textarea style="display: none;" id="<%= idPrefix %>edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
+        <a href='/<%= models.EdaItem.types.getUrlString(item.type) %>/<%= item.id %>' style="text-decoration: none;">
+          <div class="edaItemSvg listItemSvg" id="<%= idPrefix %>edaItem_<%= item.type %>_<%= item.id %>"></div>
+          <textarea style="display: none;" id="<%= idPrefix %>edaItem_<%= item.type %>_<%= item.id %>_code"><%= item.code %></textarea>
 
-        <div class="edaItemTitle"><%= item.title %></div>
-        <% if(item.createdBy) { %>
-        Created By: <a href="/user/<%= item.createdBy.id %>" class="edaItemCreatedBy"><%= item.createdBy.username %></a>
-        <% } %>
+          <div class="edaItemTitle"><%= item.title %></div>
+          <% if(item.createdBy) { %>
+          Created By: <a href="/user/<%= item.createdBy.id %>" class="edaItemCreatedBy"><%= item.createdBy.username %></a>
+          <% } %>
 
-        <div>Description:
-          <div class="edaItemDescription"><%= item.description %></div>
-        </div>
+          <div>Description:
+            <div class="edaItemDescription"><%= item.description %></div>
+          </div>
+        </a>
       </td>
     </tr>
     <% }); %>
