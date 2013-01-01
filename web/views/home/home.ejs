@@ -1,3 +1,5 @@
+<img src='/images/homeBanner.png' width="940" height="400" alt="Home Banner"/>
+
 <div class="edaItemList">
   <h2>Recent Schematic Symbols</h2>
   <ul class="edaItems" id="recentSchematicSymbols">
@@ -11,6 +13,12 @@
   </ul>
 </div>
 <div style="clear: both;"/>
+
+<style type="text/css">
+  body {
+    padding-top: 40px;
+  }
+</style>
 
 <script type="text/javascript">
   var edaItemTemplate = new EJS({url: '/templates/edaItem.ejs'});
@@ -45,6 +53,7 @@
   $(function() {
     $.get('/schematicSymbol/recent', function(data) {
       var html = '';
+      data = data.slice(0, 10);
       data.forEach(function(item) {
         item.type = 'schematicSymbol';
         item.createdBy = item.createdBy || {};
@@ -55,7 +64,7 @@
       data.forEach(function(item) {
         try {
           renderSchematicSymbol('#edaItem_schematicSymbol_' + item.id, item.code, {
-            size: 130
+            size: 150
           });
         } catch (e) {
           // todo: do something with the error
@@ -66,6 +75,7 @@
 
     $.get('/pcbModule/recent', function(data) {
       var html = '';
+      data = data.slice(0, 10);
       data.forEach(function(item, i) {
         item.type = 'pcbModule';
         item.createdBy = item.createdBy || {};
@@ -75,7 +85,7 @@
       data.forEach(function(item) {
         try {
           renderPcbModule('#edaItem_pcbModule_' + item.id, item.code, {
-            size: 130
+            size: 150
           });
         } catch (e) {
           // todo: do something with the error

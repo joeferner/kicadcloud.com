@@ -19,7 +19,7 @@
       </div>
       <% } %>
     </div>
-    <div class="span4">
+    <div class="span5">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#view2d" data-toggle="tab" id="view2dTab">2D View</a></li>
         <% if(item.has3d || (editable && item.type == models.EdaItem.types.pcbModule)) { %>
@@ -59,7 +59,7 @@
       </div>
 
     </div>
-    <div class="span7">
+    <div class="span6">
       <!-- Title -->
       <div class="readWriteField <%= getValidationErrorClass('title') %>">
         <label class="title">Title:</label>
