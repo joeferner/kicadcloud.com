@@ -42,20 +42,24 @@
             <%- getValidationError('code') %>
           <% } %>
         </div>
-        <div class="tab-pane" id="view3d">
-          <% if(editable) { %>
-            <div class="readWriteField <%= getValidationErrorClass('codeWrl') %>" style="display: none;">
-              <label class="title">KiCad Code 3D:</label>
-              <textarea type="text" class="value" name="codeWrl" id="codeWrl" style="width: 340px; height: 200px;"><%= item.codeWrl %></textarea>
+        <% if(item.has3d) { %>
+          <div class="tab-pane" id="view3d">
+            <% if(editable) { %>
+              <div class="readWriteField <%= getValidationErrorClass('codeWrl') %>" style="display: none;">
+                <label class="title">KiCad Code 3D:</label>
+                <textarea type="text" class="value" name="codeWrl" id="codeWrl" style="width: 340px; height: 200px;"><%= item.codeWrl %></textarea>
+              </div>
+            <% } %>
+            <div id="shape3dContainer">
+              <% if(item.id != 'new') { %>
+                <embed id="shape3dVrml" src="<%= item.id %>.wrl" width="400" height="300" border="0">
+              <% } %>
             </div>
-          <% } %>
-          <div id="shape3dContainer">
-            <% if(item.id != 'new') { %>
-              <embed id="shape3dVrml" src="<%= item.id %>.wrl" width="400" height="300" border="0">
+            <% if(editable) { %>
+            <input type="file" id="shape3dUpload"/>
             <% } %>
           </div>
-          <input type="file" id="shape3dUpload"/>
-        </div>
+        <% } %>
       </div>
 
     </div>
