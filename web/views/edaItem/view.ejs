@@ -103,7 +103,9 @@
         <span class="title">Created By:</span>
         <span class="value">
           <div class="value">
-            <img src="<%= item.createdBy.getGravatarUrl({s:64}) %>" /><br/>
+            <% if(item.createdBy && item.createdBy.getGravatarUrl) { %>
+              <img src="<%= item.createdBy.getGravatarUrl({s:64}) %>" /><br/>
+            <% } %>
             <a href="/user/<%= item.createdBy.id %>"><%= item.createdBy.username %></a>
           </div>
         </span>
