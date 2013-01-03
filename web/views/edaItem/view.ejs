@@ -100,8 +100,13 @@
 
       <!-- Created By -->
       <div class="readonlyField">
-        <span class="title">Created By:</span><span class="value"><a href="/user/<%= item.createdBy.id %>"><%=
-        item.createdBy.username %></a></span>
+        <span class="title">Created By:</span>
+        <span class="value">
+          <div class="value">
+            <img src="<%= item.createdBy.getGravatarUrl({s:64}) %>" /><br/>
+            <a href="/user/<%= item.createdBy.id %>"><%= item.createdBy.username %></a>
+          </div>
+        </span>
       </div>
 
       <!-- Modified Date -->
@@ -117,6 +122,35 @@
     </div>
   </div>
 </form>
+
+<% if(item.id !== 'new') { %>
+<div id="comments">
+  <h3>Comments</h3>
+  <% comments.forEach(function(comment) { %>
+    <div class="comment">
+      <div class="commentUserInfo">
+        <img src="<%= comment.createdBy.getGravatarUrl({s:64}) %>" /><br/>
+        <a href="/user/<%= comment.createdBy.id %>"><%= comment.createdBy.username %></a>
+        <div class="commentTime">
+          <div><%= sf('{0:MM/dd/yyyy}', comment.createdDate) %></div>
+          <div><%= sf('{0:t}', comment.createdDate) %></div>
+        </div>
+      </div>
+      <div class="commentBody">
+        <%= comment.body %>
+      </div>
+    </div>
+    <div style="clear: both;"></div>
+  <% }); %>
+
+  <form action="/edaItem/<%= item.id %>/addComment" method="POST">
+    <h4>Add Comment</h4>
+    <textarea type="text" class="value" name="body" style="width: 400px; height: 100px; white-space: normal;"></textarea>
+    <br/>
+    <input type="submit" class="btn btn-primary" title="Add Comment" value="Add Comment" />
+  </form>
+</div>
+<% } %>
 
 <div id="fileItemListModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
