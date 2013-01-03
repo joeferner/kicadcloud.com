@@ -23,6 +23,7 @@ run(function(err) {
     console.error("Could not rebuild search index", err.stack);
     return process.exit(-1);
   }
+  console.log('indexing complete!');
   return process.exit(0);
 });
 
