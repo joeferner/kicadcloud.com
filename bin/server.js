@@ -17,6 +17,9 @@ var args = optimist
   .options('sessionSecret', {
     describe: 'Secret used to secure session storage.'
   })
+  .options('passwordSalt', {
+    describe: 'Salt used for passwords.'
+  })
   .options('workers', {
     describe: 'Number of workers to run.'
   })
@@ -24,6 +27,7 @@ var args = optimist
 
 if(databaseJson) {
   args.sessionSecret = args.sessionSecret || databaseJson.sessionSecret;
+  args.passwordSalt = args.passwordSalt || databaseJson.passwordSalt;
 }
 
 if (args.help) {
@@ -33,6 +37,11 @@ if (args.help) {
 
 if (!args.sessionSecret) {
   console.log('Require a sessionSecret to start');
+  return process.exit(-1);
+}
+
+if (!args.passwordSalt || args.passwordSalt.length < 10) {
+  console.log('Require a passwordSalt to start');
   return process.exit(-1);
 }
 
