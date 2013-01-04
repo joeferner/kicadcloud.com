@@ -39,10 +39,8 @@ function run(callback) {
       }
 
       return async.forEachSeries(items, function(item, callback) {
-        var text = item.title + ' ' + item.description + ' ' + item.keywords;
-        text = text.toLowerCase().trim();
         console.log('indexing item ' + item.id);
-        return search.index(item.id, text, callback);
+        return search.indexEdaItem(item, callback);
       }, function(err) {
         if (err) {
           return callback(err);
