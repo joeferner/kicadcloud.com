@@ -61,7 +61,6 @@
           </div>
         <% } %>
       </div>
-
     </div>
     <div class="span6">
       <!-- Title -->
@@ -117,9 +116,12 @@
       </div>
 
       <!-- Actions -->
-      <% if(editable) { %>
       <br/>
+      <% if(editable) { %>
       <input type="submit" class="btn btn-primary" href="/edaItem/<%= item.id %>" title="Save" value="Save"/>
+      <% } %>
+      <% if(item.id !== 'new') { %>
+      <a class="btn btn-success btn-small" href="/edaItem/<%= item.id %>/download">Download <%= item.type == models.EdaItem.types.pcbModule ? '.mod' : '.lib' %></a>
       <% } %>
     </div>
   </div>
