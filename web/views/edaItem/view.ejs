@@ -147,12 +147,14 @@
     <div style="clear: both;"></div>
   <% }); %>
 
-  <form action="/edaItem/<%= item.id %>/addComment" method="POST">
-    <h4>Add Comment</h4>
-    <textarea type="text" class="value" name="body" style="width: 400px; height: 100px; white-space: normal;"></textarea>
-    <br/>
-    <input type="submit" class="btn btn-primary" title="Add Comment" value="Add Comment" />
-  </form>
+  <% if(session.user) { %>
+    <form action="/edaItem/<%= item.id %>/addComment" method="POST">
+      <h4>Add Comment</h4>
+      <textarea type="text" class="value" name="body" style="width: 400px; height: 100px; white-space: normal;"></textarea>
+      <br/>
+      <input type="submit" class="btn btn-primary" title="Add Comment" value="Add Comment" />
+    </form>
+  <% } %>
 </div>
 <% } %>
 
