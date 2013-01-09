@@ -6,5 +6,5 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db, callback) {
-
+  return callback();
 };
