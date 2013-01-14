@@ -37,6 +37,7 @@ function renderSchematicSymbol(targetSelector, schematicSymbolCode, options) {
   var lib = kicad2svg.libParser.parseSymbolDef(schematicSymbolCode);
   var svg = kicad2svg.libToSvg(lib, options);
   $(targetSelector).html(svg);
+  return lib;
 }
 
 function renderEdaItems(root) {

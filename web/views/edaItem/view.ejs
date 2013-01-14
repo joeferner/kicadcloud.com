@@ -31,8 +31,13 @@
           <div id="svgContainer"></div>
           <div id="svgModViewControls" style="display: none;">
             <ul class="nav nav-pills">
-              <li class="active" id="svgModViewFront"><a href="javascript:svgChangeView('front')">Front</a></li>
-              <li  id="svgModViewBack"><a href="javascript:svgChangeView('back')">Back</a></li>
+              <li class="active" id="svgModViewFront"><a href="javascript:svgChangePcbSide('front')">Front</a></li>
+              <li  id="svgModViewBack"><a href="javascript:svgChangePcbSide('back')">Back</a></li>
+            </ul>
+          </div>
+          <div id="svgLibViewControls" style="display: none;">
+            <ul class="nav nav-pills">
+              <li class="active" class="svgLibUnitItem" id="svgLibUnit_1"><a href="javascript:svgChangeUnit(1)">1</a></li>
             </ul>
           </div>
 
@@ -415,10 +420,13 @@
     try {
       codeErrors.text('');
       if (type == EdaItem.types.schematicSymbol) {
-        renderSchematicSymbol('#svgContainer', data, svgRenderOpts);
+        var lib = renderSchematicSymbol('#svgContainer', data, svgRenderOpts);
+        updateUnitSelector(lib);
+        $('#svgLibViewControls').show();
         $('#svgModViewControls').hide();
       } else {
         renderPcbModule('#svgContainer', data, svgRenderOpts);
+        $('#svgLibViewControls').hide();
         $('#svgModViewControls').show();
       }
     } catch (e) {
@@ -427,7 +435,7 @@
     }
   }
 
-  function svgChangeView(view) {
+  function svgChangePcbSide(view) {
     $('#svgModViewFront').removeClass('active');
     $('#svgModViewBack').removeClass('active');
     if(view == 'front') {
@@ -438,6 +446,22 @@
       svgRenderOpts.pcbSide = 'back';
     }
     updateRender();
+  }
+
+  function updateUnitSelector(lib) {
+    var unitCount = parseInt(lib.unitCount);
+    $('#svgLibViewControls ul li').remove();
+    for(var i=1; i<=unitCount; i++) {
+      $('#svgLibViewControls ul').append('<li ' + (i == 1 ? 'class="active"' : '') + ' class="svgLibUnitItem" id="svgLibUnit_' + i + '"><a href="javascript:svgChangeUnit(' + i + ')">' + i + '</a></li>');
+    }
+  }
+
+  function svgChangeUnit(unit) {
+    svgRenderOpts.unit = unit;
+    updateRender();
+
+    $('#svgLibViewControls ul li').removeClass('active');
+    $('#svgLibUnit_' + unit).addClass('active');
   }
 
   function loadShape3dFileContent(file, content) {
