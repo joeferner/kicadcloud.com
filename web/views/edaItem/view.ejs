@@ -29,6 +29,12 @@
       <div class="tab-content">
         <div class="tab-pane active" id="view2d">
           <div id="svgContainer"></div>
+          <div id="svgModViewControls" style="display: none;">
+            <ul class="nav nav-pills">
+              <li class="active" id="svgModViewFront"><a href="javascript:svgChangeView('front')">Front</a></li>
+              <li  id="svgModViewBack"><a href="javascript:svgChangeView('back')">Back</a></li>
+            </ul>
+          </div>
 
           <!-- Code -->
           <% if(editable) { %>
@@ -393,9 +399,13 @@
   }
 
   function updateRender() {
-    render($('#code').val());
+    render($('#code').val() || window.kicadCode);
   }
 
+  var svgRenderOpts = {
+    size: 350,
+    pcbSide: 'front'
+  };
   function render(data) {
     if (!data) {
       return;
@@ -405,18 +415,29 @@
     try {
       codeErrors.text('');
       if (type == EdaItem.types.schematicSymbol) {
-        renderSchematicSymbol('#svgContainer', data, {
-          size: 350
-        });
+        renderSchematicSymbol('#svgContainer', data, svgRenderOpts);
+        $('#svgModViewControls').hide();
       } else {
-        renderPcbModule('#svgContainer', data, {
-          size: 350
-        });
+        renderPcbModule('#svgContainer', data, svgRenderOpts);
+        $('#svgModViewControls').show();
       }
     } catch (e) {
       codeErrors.text('' + e);
       console.error('Could not render', e.stack);
     }
+  }
+
+  function svgChangeView(view) {
+    $('#svgModViewFront').removeClass('active');
+    $('#svgModViewBack').removeClass('active');
+    if(view == 'front') {
+      $('#svgModViewFront').addClass('active');
+      svgRenderOpts.pcbSide = 'front';
+    } else if(view == 'back') {
+      $('#svgModViewBack').addClass('active');
+      svgRenderOpts.pcbSide = 'back';
+    }
+    updateRender();
   }
 
   function loadShape3dFileContent(file, content) {
@@ -495,5 +516,6 @@
 </script>
 <script type="text/javascript">
   // keep this in a separate block unless it has broken code.
-  render('<%- item.jsKiCadData %>');
+  window.kicadCode = '<%- item.jsKiCadData %>';
+  render(window.kicadCode);
 </script>
