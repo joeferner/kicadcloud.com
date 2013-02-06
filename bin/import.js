@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 
+/*
+for f in `ls /usr/share/kicad/library/*.lib`; do bin/import.js -i $f -u import; done;
+for f in `ls ~/Downloads/kicad/libs/*.lib`; do bin/import.js -i $f -u import; done;
+for f in `ls /usr/share/kicad/modules/*.mod`; do bin/import.js -i $f -u import; done;
+for f in `ls ~/Downloads/kicad/mods/*.mod`; do bin/import.js -i $f -u import; done;
+*/
+
 'use strict';
 
 var async = require('async');
@@ -42,8 +49,9 @@ run(function(err) {
 
 function run(callback) {
   if (!fs.existsSync(args.in)) {
-    return callback(new Error("Invalid input file"));
+    return callback(new Error("Invalid input file: " + args.in));
   }
+  console.log('processing file: ' + args.in);
   var code = fs.readFileSync(args.in, 'utf8');
 
   persist.connect(function(err, conn) {
@@ -75,12 +83,11 @@ function run(callback) {
           var mod = kicad2svg.modParser(code);
           return importPcbModules(conn, userId, mod, callback);
         } catch (ex) {
-          console.log("could not parse as pcb module", ex.stack);
           try {
             var lib = kicad2svg.libParser(code);
             return importSchematicSymbols(conn, userId, lib, callback);
           } catch (ex) {
-            return callback(new Error("Could not parse data: " + ex.stack));
+            return callback(new Error("Could not parse: " + ex.stack));
           }
         }
       });
@@ -150,6 +157,7 @@ function importSchematicSymbol(conn, userId, schematicSymbol, callback) {
   s.createdDate = Date.now();
   s.modifiedBy = userId;
   s.modifiedDate = Date.now();
+  console.log('importing ' + schematicSymbol.name);
   return s.save(conn, callback);
 }
 
