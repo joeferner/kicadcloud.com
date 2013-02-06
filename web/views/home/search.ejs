@@ -3,16 +3,31 @@
 </div>
 <% if(showPaging) { %>
   <% if(pageOpts.page > 0) { %>
-    <a href="<%= urlHelper.build(pagingUrl, { query: { page: pageOpts.page - 1 } }) %>" class="pull-left">prev</a>
+    <a id="prevPage" href="<%= urlHelper.build(pagingUrl, { query: { page: pageOpts.page - 1 } }) %>" class="pull-left">prev</a>
   <% } %>
   <% if(items.length >= pageOpts.count) { %>
-    <a href="<%= urlHelper.build(pagingUrl, { query: { page: pageOpts.page + 1 } }) %>" class="pull-right">next</a>
+    <a id="nextPage" href="<%= urlHelper.build(pagingUrl, { query: { page: pageOpts.page + 1 } }) %>" class="pull-right">next</a>
   <% } %>
 <% } %>
 <div style="clear: both;"></div>
 
 <script type="text/javascript">
   $(function() {
+    $(document).keydown(function(e) {
+      var href;
+      if(e.keyCode == 39) { // right arrow
+        href = $('#nextPage').attr('href');
+        if(href) {
+          document.location.href = href;
+        }
+      } else if(e.keyCode == 37) { // left arrow
+        href = $('#prevPage').attr('href');
+        if(href) {
+          document.location.href = href;
+        }
+      }
+    });
+
     renderEdaItems('#searchResults');
   });
 </script>
