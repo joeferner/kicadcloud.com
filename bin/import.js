@@ -2,9 +2,9 @@
 
 /*
  for f in `ls /usr/share/kicad/modules/*.mod`; do bin/import.js -i $f -u import; done;
- for f in `ls ~/Downloads/kicad/mods/*.mod`; do bin/import.js -i ~/Downloads/kicad/mods/$f -u import; done;
+ for f in `ls ~/Downloads/kicad/mods/*.mod`; do bin/import.js -i $f -u import; done;
  for f in `ls /usr/share/kicad/library/*.lib`; do bin/import.js -i $f -u import; done;
- for f in `ls ~/Downloads/kicad/libs/*.lib`; do bin/import.js -i ~/Downloads/kicad/libs/$f -u import; done;
+ for f in `ls ~/Downloads/kicad/libs/*.lib`; do bin/import.js -i $f -u import; done;
  */
 
 'use strict';
@@ -96,12 +96,12 @@ function run(callback) {
           try {
             var mod = kicad2svg.modParser(code);
             return importPcbModules(conn, userId, mod, docData, callback);
-          } catch (ex) {
+          } catch (ex1) {
             try {
               var lib = kicad2svg.libParser(code);
               return importSchematicSymbols(conn, userId, lib, docData, callback);
-            } catch (ex) {
-              return callback(new Error("Could not parse: " + ex.stack));
+            } catch (ex2) {
+              return callback(new Error("Could not parse:\n" + ex1.stack + "\n" + ex2.stack));
             }
           }
         });
@@ -137,7 +137,11 @@ function tryLoadDocFile(libModFilename, callback) {
 
 function importPcbModules(conn, userId, modules, docData, callback) {
   return async.forEachSeries(Object.keys(modules.modules), function(key, callback) {
-    return importPcbModule(conn, userId, modules.modules[key], docData.modules[key], callback);
+    var modDocs = null;
+    if (docData) {
+      modDocs = docData.modules[key];
+    }
+    return importPcbModule(conn, userId, modules.modules[key], modDocs, callback);
   }, callback);
 }
 
@@ -188,7 +192,11 @@ function importPcbModule(conn, userId, pcbModule, docData, callback) {
 
 function importSchematicSymbols(conn, userId, schematicSymbols, docData, callback) {
   return async.forEachSeries(Object.keys(schematicSymbols.symbols), function(key, callback) {
-    return importSchematicSymbol(conn, userId, schematicSymbols.symbols[key], docData.symbols[key], callback);
+    var libDocs = null;
+    if (docData) {
+      libDocs = docData.symbols[key];
+    }
+    return importSchematicSymbol(conn, userId, schematicSymbols.symbols[key], libDocs, callback);
   }, callback);
 }
 
