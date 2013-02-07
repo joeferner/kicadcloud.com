@@ -25,7 +25,7 @@
     "express-validator": "~0.3.0",
     "less-middleware": "~0.1.8",
     "gravatar": "~1.0.6",
-    "db-migrate": "~0.2.5",
+    "db-migrate": "~0.3.2",
     "sqlite3": "~2.1.5",
     "persist": "git://github.com/nearinfinity/node-persist.git",
     "java": "git://github.com/nearinfinity/node-java.git",
