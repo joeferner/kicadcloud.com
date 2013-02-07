@@ -9,6 +9,9 @@ var optimist = require('optimist');
 var models = require('../lib/models');
 
 var args = optimist
+  .options('id', {
+    describe: 'Id of item to index.'
+  })
   .alias('h', 'help')
   .alias('h', '?')
   .argv;
@@ -40,8 +43,11 @@ function run(callback) {
 
       var i = 0;
       return async.forEachSeries(items, function(item, callback) {
-        console.log('indexing item ' + i + '/' + items.length + ' (id: ' + item.id + ')');
         i++;
+        if (args.id && args.id != item.id) {
+          return process.nextTick(callback);
+        }
+        console.log('indexing item ' + i + '/' + items.length + ' (id: ' + item.id + ')');
         return search.indexEdaItem(item, callback);
       }, function(err) {
         if (err) {
