@@ -38,8 +38,10 @@ function run(callback) {
         return callback(err);
       }
 
+      var i = 0;
       return async.forEachSeries(items, function(item, callback) {
-        console.log('indexing item ' + item.id);
+        console.log('indexing item ' + i + '/' + items.length + ' (id: ' + item.id + ')');
+        i++;
         return search.indexEdaItem(item, callback);
       }, function(err) {
         if (err) {
