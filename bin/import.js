@@ -141,7 +141,17 @@ function importPcbModules(conn, userId, modules, docData, callback) {
     if (docData) {
       modDocs = docData.modules[key];
     }
-    return importPcbModule(conn, userId, modules.modules[key], modDocs, callback);
+    var mod = modules.modules[key];
+    models.EdaItem.where('title = ?', mod.name).first(conn, function(err, edaItem) {
+      if (err) {
+        return callback(err);
+      }
+      if (edaItem) {
+        console.log('duplicate item: ' + mod.name + ' (id:' + edaItem.id + ')');
+        return callback();
+      }
+      return importPcbModule(conn, userId, mod, modDocs, callback);
+    });
   }, callback);
 }
 
@@ -196,7 +206,18 @@ function importSchematicSymbols(conn, userId, schematicSymbols, docData, callbac
     if (docData) {
       libDocs = docData.symbols[key];
     }
-    return importSchematicSymbol(conn, userId, schematicSymbols.symbols[key], libDocs, callback);
+
+    var symbol = schematicSymbols.symbols[key];
+    models.EdaItem.where('title = ?', symbol.name).first(conn, function(err, edaItem) {
+      if (err) {
+        return callback(err);
+      }
+      if (edaItem) {
+        console.log('duplicate item: ' + symbol.name + ' (id:' + edaItem.id + ')');
+        return callback();
+      }
+      return importSchematicSymbol(conn, userId, symbol, libDocs, callback);
+    });
   }, callback);
 }
 

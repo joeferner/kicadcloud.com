@@ -20,7 +20,7 @@
     "optimist": "~0.3.5",
     "connect-redis": "~1.4.4",
     "ejs": "~0.8.3",
-    "express-partials": "0.0.6",
+    "express-partials": "~0.0.6",
     "sf": "~0.1.5",
     "express-validator": "~0.3.0",
     "less-middleware": "~0.1.8",
