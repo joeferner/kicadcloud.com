@@ -222,24 +222,31 @@ function importSchematicSymbols(conn, userId, schematicSymbols, docData, callbac
 }
 
 function importSchematicSymbol(conn, userId, schematicSymbol, docData, callback) {
-  var s = new models.EdaItem();
-  s.type = models.EdaItem.types.schematicSymbol;
-  s.title = schematicSymbol.name;
-  s.description = 'Imported from ' + path.basename(args.in);
-  if (docData && docData.description) {
-    s.description += '\n\n' + docData.description;
-  }
-  s.keywords = '';
-  if (docData && docData.keywords) {
-    s.keywords = '\n\n' + docData.keywords.join(', ');
-  }
-  s.code = schematicSymbol.original;
-  s.createdBy = userId;
-  s.createdDate = Date.now();
-  s.modifiedBy = userId;
-  s.modifiedDate = Date.now();
-  console.log('importing ' + schematicSymbol.name);
-  return s.save(conn, callback);
+  return findAddUnitsId(conn, '', function(err, unitId) {
+    if (err) {
+      return callback(err);
+    }
+
+    var s = new models.EdaItem();
+    s.type = models.EdaItem.types.schematicSymbol;
+    s.title = schematicSymbol.name;
+    s.description = 'Imported from ' + path.basename(args.in);
+    if (docData && docData.description) {
+      s.description += '\n\n' + docData.description;
+    }
+    s.keywords = '';
+    if (docData && docData.keywords) {
+      s.keywords = '\n\n' + docData.keywords.join(', ');
+    }
+    s.code = schematicSymbol.original;
+    s.unitId = unitId;
+    s.createdBy = userId;
+    s.createdDate = Date.now();
+    s.modifiedBy = userId;
+    s.modifiedDate = Date.now();
+    console.log('importing ' + schematicSymbol.name);
+    return s.save(conn, callback);
+  });
 }
 
 function findAddUnitsId(conn, unitName, callback) {
