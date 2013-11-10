@@ -34,7 +34,7 @@
     "bunyan": "~0.16.8",
     "forever": "~0.10.0",
     "mysql": "~2.0.0-alpha5",
-    "email": "~0.2.5",
+    "email": "~0.2.6",
     "lru-cache": "~2.2.2"
   },
   "devDependencies": {
