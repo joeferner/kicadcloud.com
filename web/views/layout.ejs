@@ -20,14 +20,14 @@
 
       <ul class="nav">
         <li class="<%= activeNav == 'home' ? 'active' : '' %>"><a href="/">Home</a></li>
-        <% if(session.user) { %>
+        <% if(session && session.user) { %>
         <li class="<%= activeNav == 'me' ? 'active' : '' %>"><a href="/user/<%= session.user.id %>">Me</a></li>
         <li class="<%= activeNav == 'new' ? 'active' : '' %>"><a href="/edaItem/new">New Part</a></li>
         <% } %>
       </ul>
       <div class="pull-right">
         <ul class="nav">
-          <% if(session.user) { %>
+          <% if(session && session.user) { %>
           <li class="dropdown userInfoDrop">
             <a href="#" id="userInfoDropButton" role="button" class="dropdown-toggle" data-toggle="dropdown"><span class="navUsername"><%= session.user.username %></span><b class="caret"></b></a>
             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="userInfoDropButton">
